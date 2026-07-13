@@ -1,5 +1,5 @@
 --[[
-  ULTIMATE FARM v5.5 - GUI HORIZONTAL PROFESIONAL
+  ULTIMATE FARM v5.1 - GUI HORIZONTAL PROFESIONAL
   Script completo para Speed for Crowns - Zona 12
   Diseño horizontal con stats en una línea y botones organizados
 --]]
@@ -147,18 +147,17 @@ end)
 -- 2. CONFIGURACIÓN DEL SCRIPT
 -- ============================================================
 local scriptConfig = {
-    version = "v5.5",
+    version = "v5.1",
     versionDate = "13/07/2026",
     changelogs = {
-        {version = "v5.5", date = "13/07/2026", changes = {
+        {version = "v5.1", date = "13/07/2026", changes = {
             "✅ GUI rediseñada en formato horizontal",
             "✅ Stats en una sola línea",
             "✅ Botones organizados en filas",
             "✅ Menú Principal y Utilidades separados",
             "✅ Sistema de sugerencias y changelogs"
         }},
-        {version = "v5.
-      0", date = "12/07/2026", changes = {
+        {version = "v5.0", date = "12/07/2026", changes = {
             "✅ Clon Farm x2 agregado",
             "✅ Anti-AFK implementado"
         }}
