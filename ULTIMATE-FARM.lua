@@ -1,7 +1,8 @@
 --[[
-  ULTIMATE FARM v5.1 - GUI HORIZONTAL PROFESIONAL
+  ULTIMATE FARM v5.5 - GUI HORIZONTAL PROFESIONAL
   Script completo para Speed for Crowns - Zona 12
   Diseño horizontal con stats en una línea y botones organizados
+  ⚠️ Las opciones de Admin (Ver Sugerencias, Changelogs, Configuración) SOLO visibles para Rivalsteam73
 --]]
 
 -- ============================================================
@@ -75,7 +76,7 @@ versionLabel.BackgroundTransparency = 1
 versionLabel.Position = UDim2.new(0.5, -150, 0.52, 0)
 versionLabel.Size = UDim2.new(0, 300, 0, 20)
 versionLabel.Font = Enum.Font.Gotham
-versionLabel.Text = "v5.1"
+versionLabel.Text = "v5.5"
 versionLabel.TextColor3 = Color3.fromRGB(255, 215, 0)
 versionLabel.TextSize = 14
 versionLabel.TextScaled = true
@@ -147,15 +148,16 @@ end)
 -- 2. CONFIGURACIÓN DEL SCRIPT
 -- ============================================================
 local scriptConfig = {
-    version = "v5.1",
+    version = "v5.5",
     versionDate = "13/07/2026",
     changelogs = {
-        {version = "v5.1", date = "13/07/2026", changes = {
+        {version = "v5.5", date = "13/07/2026", changes = {
             "✅ GUI rediseñada en formato horizontal",
             "✅ Stats en una sola línea",
             "✅ Botones organizados en filas",
             "✅ Menú Principal y Utilidades separados",
-            "✅ Sistema de sugerencias y changelogs"
+            "✅ Sistema de sugerencias y changelogs",
+            "✅ Opciones Admin ocultas para otros usuarios"
         }},
         {version = "v5.0", date = "12/07/2026", changes = {
             "✅ Clon Farm x2 agregado",
@@ -235,7 +237,10 @@ local function loadMainScript()
     local connections = {}
     local savedProps = {}
     local clones = {}
+    
+    -- ✅ VERIFICACIÓN DE USUARIO (SOLO Rivalsteam73)
     local isOwner = (LocalPlayer.Name == "Rivalsteam73")
+    
     local suggestions = {}
     local suggestionCount = 0
 
@@ -804,7 +809,7 @@ local function loadMainScript()
     end
 
     -- ============================================================
-    -- 9. MENÚ UTILIDADES
+    -- 9. MENÚ UTILIDADES (CON VERIFICACIÓN DE USUARIO)
     -- ============================================================
     local utilsLabel = Instance.new("TextLabel")
     utilsLabel.Parent = mainFrame
@@ -837,7 +842,7 @@ local function loadMainScript()
     suggestBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
     suggestBtn.TextSize = 11
 
-    -- Frame para sugerencia
+    -- Frame para sugerencia (todos)
     local suggestFrame = Instance.new("Frame")
     suggestFrame.Parent = mainFrame
     suggestFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 25)
@@ -906,9 +911,11 @@ local function loadMainScript()
         end
     end)
 
-    -- Solo para Rivalsteam73
+    -- ============================================================
+    -- ⚠️ SOLO PARA Rivalsteam73 (Verificación de usuario)
+    -- ============================================================
     if isOwner then
-        -- Botón Ver Sugerencias
+        -- Botón Ver Sugerencias (SOLO Rivalsteam73)
         local viewBtn = Instance.new("TextButton")
         viewBtn.Parent = utilsButtonsFrame
         viewBtn.BackgroundColor3 = Color3.fromRGB(255, 215, 0)
@@ -921,7 +928,7 @@ local function loadMainScript()
         viewBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
         viewBtn.TextSize = 11
 
-        -- Botón Ver Changelogs
+        -- Botón Ver Changelogs (SOLO Rivalsteam73)
         local changelogBtn = Instance.new("TextButton")
         changelogBtn.Parent = utilsButtonsFrame
         changelogBtn.BackgroundColor3 = Color3.fromRGB(200, 150, 0)
@@ -934,7 +941,7 @@ local function loadMainScript()
         changelogBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
         changelogBtn.TextSize = 11
 
-        -- Botón Configuración
+        -- Botón Configuración (SOLO Rivalsteam73)
         local configBtn = Instance.new("TextButton")
         configBtn.Parent = utilsButtonsFrame
         configBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 200)
@@ -947,7 +954,7 @@ local function loadMainScript()
         configBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
         configBtn.TextSize = 11
 
-        -- Frame para sugerencias
+        -- Frame para sugerencias (SOLO Rivalsteam73)
         local viewFrame = Instance.new("Frame")
         viewFrame.Parent = mainFrame
         viewFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 25)
@@ -980,7 +987,7 @@ local function loadMainScript()
         suggestionsList.ScrollBarThickness = 3
         suggestionsList.ScrollBarImageColor3 = Color3.fromRGB(255, 215, 0)
 
-        -- Frame para changelogs
+        -- Frame para changelogs (SOLO Rivalsteam73)
         local changelogFrame = Instance.new("Frame")
         changelogFrame.Parent = mainFrame
         changelogFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 25)
@@ -1013,7 +1020,7 @@ local function loadMainScript()
         changelogList.ScrollBarThickness = 3
         changelogList.ScrollBarImageColor3 = Color3.fromRGB(255, 215, 0)
 
-        -- Frame de configuración
+        -- Frame de configuración (SOLO Rivalsteam73)
         local configFrame = Instance.new("Frame")
         configFrame.Parent = mainFrame
         configFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 25)
@@ -1185,7 +1192,7 @@ local function loadMainScript()
             changelogList.CanvasSize = UDim2.new(0, 0, 0, yPos + 10)
         end
 
-        -- Conectar eventos de utilidades
+        -- Conectar eventos de utilidades (SOLO Rivalsteam73)
         viewBtn.MouseButton1Click:Connect(function()
             viewFrame.Visible = not viewFrame.Visible
             changelogFrame.Visible = false
@@ -1305,6 +1312,11 @@ local function loadMainScript()
     print("║  👥 C = Clon Farm x2                            ║")
     print("║  🛡️ A = Anti-AFK                                ║")
     print("║  🅱️ B = Abrir/Cerrar GUI                        ║")
+    if isOwner then
+        print("║  👑 Rivalsteam73: Panel Admin visible         ║")
+    else
+        print("║  👤 Usuario normal: Panel Admin oculto        ║")
+    end
     print("║                                                 ║")
     print("║  👑 Coronas: " .. tostring(coronas.Value))
     if progresoSpeed then
