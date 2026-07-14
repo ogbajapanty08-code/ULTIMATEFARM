@@ -1,4 +1,4 @@
--- Script: ULTIMATE FARM v7.0
+-- Script: ULTIMATE FARM v8.0
 -- Creador: Rivalsteam73
 -- Juego: Speed for Crowns
 
@@ -19,14 +19,16 @@ local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 -- CONFIGURACIÓN DEL SCRIPT
 -- ============================================================
 local scriptConfig = {
-    version = "v7.0",
+    version = "v8.0",
     versionDate = "14/07/2026",
     changelogs = {
-        {version = "v7.0", date = "14/07/2026", changes = {
-            "GUI CREADO POR RIVALSTEAM73",
-            "DISEÑO CON COLORES UNICOS",
-            "PANELES DE CATEGORIA",
-            "BOTONES ORGANIZADOS"
+        {version = "v8.0", date = "14/07/2026", changes = {
+            "🎨 GUI COMPLETAMENTE REDISEÑADA",
+            "✨ EFECTOS DE BRILLO Y SOMBRA",
+            "🌈 COLORES GRADIENTE EN BOTONES",
+            "📱 OPTIMIZADO PARA MÓVIL",
+            "⚡ ANIMACIONES SUAVES",
+            "🎯 BOTONES CON EFECTO HOVER Y CLICK"
         }}
     }
 }
@@ -658,77 +660,174 @@ local function toggleFarmAll()
 end
 
 -- ============================================================
--- CREAR GUI ESTILO JMODS
+-- FUNCIONES DE GUI MEJORADAS
+-- ============================================================
+
+-- Función para crear botones con efectos visuales
+local function createStyledButton(parent, text, color, callback, position, size)
+    local btn = Instance.new("TextButton")
+    btn.Parent = parent
+    btn.BackgroundColor3 = color
+    btn.BackgroundTransparency = 0.85
+    btn.BorderSizePixel = 0
+    btn.Position = position
+    btn.Size = size
+    btn.Font = Enum.Font.GothamBold
+    btn.Text = text
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.TextSize = 11
+    btn.AutoButtonColor = false
+    
+    -- Efecto de brillo
+    local glow = Instance.new("Frame")
+    glow.Parent = btn
+    glow.BackgroundColor3 = color
+    glow.BackgroundTransparency = 0.7
+    glow.BorderSizePixel = 0
+    glow.Size = UDim2.new(1, 0, 1, 0)
+    glow.ZIndex = 0
+    
+    local glowCorner = Instance.new("UICorner")
+    glowCorner.Parent = glow
+    glowCorner.CornerRadius = UDim.new(0, 6)
+    
+    local btnCorner = Instance.new("UICorner")
+    btnCorner.Parent = btn
+    btnCorner.CornerRadius = UDim.new(0, 6)
+    
+    -- Hover effect
+    btn.MouseEnter:Connect(function()
+        TweenService:Create(btn, TweenInfo.new(0.2), {
+            BackgroundTransparency = 0.5
+        }):Play()
+        TweenService:Create(glow, TweenInfo.new(0.2), {
+            BackgroundTransparency = 0.4
+        }):Play()
+    end)
+    
+    btn.MouseLeave:Connect(function()
+        TweenService:Create(btn, TweenInfo.new(0.2), {
+            BackgroundTransparency = 0.85
+        }):Play()
+        TweenService:Create(glow, TweenInfo.new(0.2), {
+            BackgroundTransparency = 0.7
+        }):Play()
+    end)
+    
+    btn.MouseButton1Click:Connect(function()
+        callback()
+        -- Efecto click
+        TweenService:Create(btn, TweenInfo.new(0.1), {
+            BackgroundTransparency = 0.3
+        }):Play()
+        task.wait(0.1)
+        TweenService:Create(btn, TweenInfo.new(0.1), {
+            BackgroundTransparency = 0.85
+        }):Play()
+    end)
+    
+    return btn
+end
+
+-- ============================================================
+-- CREAR GUI REDISEÑADA
 -- ============================================================
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "UltimateFarm"
 screenGui.ResetOnSpawn = false
 screenGui.Parent = PlayerGui
 
--- Frame principal
+-- Frame principal con efecto glass
 local mainFrame = Instance.new("Frame")
 mainFrame.Parent = screenGui
-mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
-mainFrame.BackgroundTransparency = 0.05
-mainFrame.BorderSizePixel = 0
-mainFrame.Position = UDim2.new(0.5, -300, 0.05, 0)
-mainFrame.Size = UDim2.new(0, 600, 0, 500)
+mainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 30)
+mainFrame.BackgroundTransparency = 0.1
+mainFrame.BorderSizePixel = 1
+mainFrame.BorderColor3 = Color3.fromRGB(255, 215, 0)
+mainFrame.Position = UDim2.new(0.5, -320, 0.05, 0)
+mainFrame.Size = UDim2.new(0, 640, 0, 520)
 mainFrame.ClipsDescendants = true
 mainFrame.Active = true
 mainFrame.Draggable = true
 
 local mainCorner = Instance.new("UICorner")
 mainCorner.Parent = mainFrame
-mainCorner.CornerRadius = UDim.new(0, 12)
+mainCorner.CornerRadius = UDim.new(0, 16)
 
--- Sombra
+-- Sombra mejorada
 local shadow = Instance.new("Frame")
 shadow.Parent = mainFrame
 shadow.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-shadow.BackgroundTransparency = 0.7
+shadow.BackgroundTransparency = 0.6
 shadow.BorderSizePixel = 0
-shadow.Position = UDim2.new(0, 5, 0, 5)
-shadow.Size = UDim2.new(1, 10, 1, 10)
+shadow.Position = UDim2.new(0, 8, 0, 8)
+shadow.Size = UDim2.new(1, 16, 1, 16)
 shadow.ZIndex = 0
 
+local shadowCorner = Instance.new("UICorner")
+shadowCorner.Parent = shadow
+shadowCorner.CornerRadius = UDim.new(0, 16)
+
+-- Borde brillante superior
+local glowBorder = Instance.new("Frame")
+glowBorder.Parent = mainFrame
+glowBorder.BackgroundColor3 = Color3.fromRGB(255, 215, 0)
+glowBorder.BackgroundTransparency = 0.8
+glowBorder.BorderSizePixel = 0
+glowBorder.Position = UDim2.new(0, 10, 0, 0)
+glowBorder.Size = UDim2.new(1, -20, 0, 2)
+
 -- ============================================================
--- BARRA SUPERIOR (Título + Stats)
+-- BARRA SUPERIOR
 -- ============================================================
 local topBar = Instance.new("Frame")
 topBar.Parent = mainFrame
-topBar.BackgroundColor3 = Color3.fromRGB(30, 30, 45)
+topBar.BackgroundColor3 = Color3.fromRGB(25, 25, 45)
+topBar.BackgroundTransparency = 0.3
 topBar.BorderSizePixel = 0
-topBar.Size = UDim2.new(1, 0, 0, 80)
+topBar.Size = UDim2.new(1, 0, 0, 85)
 
 local topCorner = Instance.new("UICorner")
 topCorner.Parent = topBar
-topCorner.CornerRadius = UDim.new(0, 12)
+topCorner.CornerRadius = UDim.new(0, 16)
 
--- Título
+-- Título con efecto
 local title = Instance.new("TextLabel")
 title.Parent = topBar
 title.BackgroundTransparency = 1
 title.Position = UDim2.new(0, 15, 0, 5)
-title.Size = UDim2.new(1, -30, 0, 25)
+title.Size = UDim2.new(1, -30, 0, 28)
 title.Font = Enum.Font.GothamBold
-title.Text = "ULTIMATE FARM v7.0"
+title.Text = "✨ ULTIMATE FARM v8.0"
 title.TextColor3 = Color3.fromRGB(255, 215, 0)
-title.TextSize = 18
+title.TextSize = 20
 title.TextXAlignment = Enum.TextXAlignment.Left
+
+-- Subtítulo
+local subtitle = Instance.new("TextLabel")
+subtitle.Parent = topBar
+subtitle.BackgroundTransparency = 1
+subtitle.Position = UDim2.new(0, 15, 0, 33)
+subtitle.Size = UDim2.new(1, -30, 0, 16)
+subtitle.Font = Enum.Font.Gotham
+subtitle.Text = "by Rivalsteam73"
+subtitle.TextColor3 = Color3.fromRGB(150, 150, 200)
+subtitle.TextSize = 12
+subtitle.TextXAlignment = Enum.TextXAlignment.Left
 
 -- Stats
 local statsFrame = Instance.new("Frame")
 statsFrame.Parent = topBar
 statsFrame.BackgroundTransparency = 1
-statsFrame.Position = UDim2.new(0, 15, 0, 35)
-statsFrame.Size = UDim2.new(1, -30, 0, 35)
+statsFrame.Position = UDim2.new(0, 15, 0, 52)
+statsFrame.Size = UDim2.new(1, -30, 0, 28)
 
 local function createStat(text, color, posX)
     local label = Instance.new("TextLabel")
     label.Parent = statsFrame
     label.BackgroundTransparency = 1
     label.Position = UDim2.new(posX, 0, 0, 0)
-    label.Size = UDim2.new(0, 100, 1, 0)
+    label.Size = UDim2.new(0, 120, 1, 0)
     label.Font = Enum.Font.GothamBold
     label.Text = text
     label.TextColor3 = color
@@ -738,9 +837,9 @@ local function createStat(text, color, posX)
 end
 
 local coronaStat = createStat("👑 " .. tostring(coronas.Value), Color3.fromRGB(255, 215, 0), 0)
-local speedStat = createStat("⚡ " .. (progresoSpeed and tostring(progresoSpeed.Value) or "N/A"), Color3.fromRGB(100, 200, 255), 0.20)
-local clonesStat = createStat("👥 " .. tostring(#clones), Color3.fromRGB(100, 255, 200), 0.40)
-local statusStat = createStat(elements.partCorona and "✅" or "❌", elements.partCorona and Color3.fromRGB(100, 255, 100) or Color3.fromRGB(255, 100, 100), 0.60)
+local speedStat = createStat("⚡ " .. (progresoSpeed and tostring(progresoSpeed.Value) or "N/A"), Color3.fromRGB(100, 200, 255), 0.22)
+local clonesStat = createStat("👥 " .. tostring(#clones), Color3.fromRGB(100, 255, 200), 0.44)
+local statusStat = createStat(elements.partCorona and "✅" or "❌", elements.partCorona and Color3.fromRGB(100, 255, 100) or Color3.fromRGB(255, 100, 100), 0.66)
 
 local function updateStats()
     coronaStat.Text = "👑 " .. tostring(coronas.Value)
@@ -755,14 +854,14 @@ if progresoSpeed then progresoSpeed.Changed:Connect(updateStats) end
 local closeBtn = Instance.new("TextButton")
 closeBtn.Parent = topBar
 closeBtn.BackgroundColor3 = Color3.fromRGB(200, 40, 40)
-closeBtn.BackgroundTransparency = 0.8
+closeBtn.BackgroundTransparency = 0.7
 closeBtn.BorderSizePixel = 0
-closeBtn.Position = UDim2.new(1, -35, 0, 5)
-closeBtn.Size = UDim2.new(0, 25, 0, 25)
+closeBtn.Position = UDim2.new(1, -38, 0, 6)
+closeBtn.Size = UDim2.new(0, 28, 0, 28)
 closeBtn.Font = Enum.Font.GothamBold
 closeBtn.Text = "✕"
 closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-closeBtn.TextSize = 14
+closeBtn.TextSize = 16
 closeBtn.MouseButton1Click:Connect(function()
     screenGui:Destroy()
 end)
@@ -777,58 +876,62 @@ closeCorner.CornerRadius = UDim.new(1, 0)
 local mainCategory = Instance.new("Frame")
 mainCategory.Parent = mainFrame
 mainCategory.BackgroundTransparency = 1
-mainCategory.Position = UDim2.new(0, 15, 0, 90)
-mainCategory.Size = UDim2.new(1, -30, 0, 45)
+mainCategory.Position = UDim2.new(0, 15, 0, 95)
+mainCategory.Size = UDim2.new(1, -30, 0, 60)
 
 local catTitle = Instance.new("TextLabel")
 catTitle.Parent = mainCategory
 catTitle.BackgroundTransparency = 1
-catTitle.Position = UDim2.new(0, 0, 0, 0)
-catTitle.Size = UDim2.new(0, 150, 0, 20)
+catTitle.Position = UDim2.new(0, 5, 0, 0)
+catTitle.Size = UDim2.new(0, 150, 0, 22)
 catTitle.Font = Enum.Font.GothamBold
-catTitle.Text = "PRINCIPAL"
+catTitle.Text = "⭐ PRINCIPAL"
 catTitle.TextColor3 = Color3.fromRGB(255, 215, 0)
 catTitle.TextSize = 14
 catTitle.TextXAlignment = Enum.TextXAlignment.Left
 
--- Botones principales (fila 1)
+-- Línea decorativa
+local line = Instance.new("Frame")
+line.Parent = mainCategory
+line.BackgroundColor3 = Color3.fromRGB(255, 215, 0)
+line.BackgroundTransparency = 0.8
+line.BorderSizePixel = 0
+line.Position = UDim2.new(0, 160, 0, 10)
+line.Size = UDim2.new(1, -170, 0, 1)
+
+-- Botones principales
 local btnFrame1 = Instance.new("Frame")
 btnFrame1.Parent = mainCategory
 btnFrame1.BackgroundTransparency = 1
-btnFrame1.Position = UDim2.new(0, 0, 0, 22)
-btnFrame1.Size = UDim2.new(1, 0, 0, 22)
+btnFrame1.Position = UDim2.new(0, 0, 0, 28)
+btnFrame1.Size = UDim2.new(1, 0, 0, 28)
 
 local mainButtons1 = {
-    {text = "TELEPORT", color = Color3.fromRGB(0, 150, 255), toggle = "teleport", func = toggleTeleport},
-    {text = "INVISIBLE", color = Color3.fromRGB(180, 50, 220), toggle = "invisible", func = toggleInvisible},
-    {text = "TREADMILL", color = Color3.fromRGB(0, 200, 150), toggle = "treadmill", func = toggleTreadmill},
-    {text = "CLON FARM", color = Color3.fromRGB(0, 200, 100), toggle = "clon", func = toggleClon},
-    {text = "ANTI-AFK", color = Color3.fromRGB(100, 100, 200), toggle = "antiAFK", func = toggleAntiAFK}
+    {text = "🛸 TELEPORT", color = Color3.fromRGB(0, 150, 255), toggle = "teleport", func = toggleTeleport},
+    {text = "👻 INVISIBLE", color = Color3.fromRGB(180, 50, 220), toggle = "invisible", func = toggleInvisible},
+    {text = "🏃 TREADMILL", color = Color3.fromRGB(0, 200, 150), toggle = "treadmill", func = toggleTreadmill},
+    {text = "🧬 CLON FARM", color = Color3.fromRGB(0, 200, 100), toggle = "clon", func = toggleClon},
+    {text = "🛡️ ANTI-AFK", color = Color3.fromRGB(100, 100, 200), toggle = "antiAFK", func = toggleAntiAFK}
 }
 
 local btnObjects = {}
 
 for i, btnData in ipairs(mainButtons1) do
-    local btn = Instance.new("TextButton")
-    btn.Parent = btnFrame1
-    btn.BackgroundColor3 = btnData.color
-    btn.BackgroundTransparency = 0.85
-    btn.BorderSizePixel = 0
-    btn.Position = UDim2.new((i-1) * 0.2, 2, 0, 0)
-    btn.Size = UDim2.new(0.19, -2, 1, 0)
-    btn.Font = Enum.Font.GothamBold
-    btn.Text = btnData.text .. " [OFF]"
-    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btn.TextSize = 11
+    local btn = createStyledButton(
+        btnFrame1,
+        btnData.text .. " [OFF]",
+        btnData.color,
+        function()
+            btnData.func()
+            local st = state[btnData.toggle]
+            btn.Text = btnData.text .. (st and " [ON]" or " [OFF]")
+            btn.BackgroundColor3 = st and Color3.fromRGB(200, 50, 50) or btnData.color
+            updateStats()
+        end,
+        UDim2.new((i-1) * 0.2, 2, 0, 0),
+        UDim2.new(0.19, -2, 1, 0)
+    )
     btnObjects[btnData.toggle] = btn
-    
-    btn.MouseButton1Click:Connect(function()
-        btnData.func()
-        local st = state[btnData.toggle]
-        btn.Text = btnData.text .. (st and " [ON]" or " [OFF]")
-        btn.BackgroundColor3 = st and Color3.fromRGB(200, 50, 50) or btnData.color
-        updateStats()
-    end)
 end
 
 -- ============================================================
@@ -837,58 +940,61 @@ end
 local utilsCategory = Instance.new("Frame")
 utilsCategory.Parent = mainFrame
 utilsCategory.BackgroundTransparency = 1
-utilsCategory.Position = UDim2.new(0, 15, 0, 145)
-utilsCategory.Size = UDim2.new(1, -30, 0, 45)
+utilsCategory.Position = UDim2.new(0, 15, 0, 165)
+utilsCategory.Size = UDim2.new(1, -30, 0, 60)
 
 local catTitle2 = Instance.new("TextLabel")
 catTitle2.Parent = utilsCategory
 catTitle2.BackgroundTransparency = 1
-catTitle2.Position = UDim2.new(0, 0, 0, 0)
-catTitle2.Size = UDim2.new(0, 150, 0, 20)
+catTitle2.Position = UDim2.new(0, 5, 0, 0)
+catTitle2.Size = UDim2.new(0, 150, 0, 22)
 catTitle2.Font = Enum.Font.GothamBold
-catTitle2.Text = "UTILIDADES"
+catTitle2.Text = "⚡ UTILIDADES"
 catTitle2.TextColor3 = Color3.fromRGB(100, 200, 255)
 catTitle2.TextSize = 14
 catTitle2.TextXAlignment = Enum.TextXAlignment.Left
 
+local line2 = Instance.new("Frame")
+line2.Parent = utilsCategory
+line2.BackgroundColor3 = Color3.fromRGB(100, 200, 255)
+line2.BackgroundTransparency = 0.8
+line2.BorderSizePixel = 0
+line2.Position = UDim2.new(0, 160, 0, 10)
+line2.Size = UDim2.new(1, -170, 0, 1)
+
 local btnFrame2 = Instance.new("Frame")
 btnFrame2.Parent = utilsCategory
 btnFrame2.BackgroundTransparency = 1
-btnFrame2.Position = UDim2.new(0, 0, 0, 22)
-btnFrame2.Size = UDim2.new(1, 0, 0, 22)
+btnFrame2.Position = UDim2.new(0, 0, 0, 28)
+btnFrame2.Size = UDim2.new(1, 0, 0, 28)
 
 local utilsButtons = {
-    {text = "AUTO-SPEED", color = Color3.fromRGB(255, 150, 0), toggle = "autoSpeed", func = toggleAutoSpeed},
-    {text = "AUTO-CROWNS", color = Color3.fromRGB(255, 215, 0), toggle = "autoCrowns", func = toggleAutoCrowns},
-    {text = "AURA", color = Color3.fromRGB(200, 100, 255), toggle = "auraActive", func = toggleAura},
-    {text = "AUTO-WALK", color = Color3.fromRGB(0, 255, 200), toggle = "autoWalk", func = toggleAutoWalk},
-    {text = "AUTO-REBIRTH", color = Color3.fromRGB(255, 100, 200), toggle = "autoRebirth", func = toggleAutoRebirth}
+    {text = "⚡ AUTO-SPEED", color = Color3.fromRGB(255, 150, 0), toggle = "autoSpeed", func = toggleAutoSpeed},
+    {text = "👑 AUTO-CROWNS", color = Color3.fromRGB(255, 215, 0), toggle = "autoCrowns", func = toggleAutoCrowns},
+    {text = "🌀 AURA", color = Color3.fromRGB(200, 100, 255), toggle = "auraActive", func = toggleAura},
+    {text = "🚶 AUTO-WALK", color = Color3.fromRGB(0, 255, 200), toggle = "autoWalk", func = toggleAutoWalk},
+    {text = "🔄 AUTO-REBIRTH", color = Color3.fromRGB(255, 100, 200), toggle = "autoRebirth", func = toggleAutoRebirth}
 }
 
 for i, btnData in ipairs(utilsButtons) do
-    local btn = Instance.new("TextButton")
-    btn.Parent = btnFrame2
-    btn.BackgroundColor3 = btnData.color
-    btn.BackgroundTransparency = 0.85
-    btn.BorderSizePixel = 0
-    btn.Position = UDim2.new((i-1) * 0.2, 2, 0, 0)
-    btn.Size = UDim2.new(0.19, -2, 1, 0)
-    btn.Font = Enum.Font.GothamBold
-    btn.Text = btnData.text .. " [OFF]"
-    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btn.TextSize = 11
+    local btn = createStyledButton(
+        btnFrame2,
+        btnData.text .. " [OFF]",
+        btnData.color,
+        function()
+            btnData.func()
+            local st = state[btnData.toggle]
+            if btnData.toggle == "autoRebirth" then
+                st = autoRebirthActive
+            end
+            btn.Text = btnData.text .. (st and " [ON]" or " [OFF]")
+            btn.BackgroundColor3 = st and Color3.fromRGB(200, 50, 50) or btnData.color
+            updateStats()
+        end,
+        UDim2.new((i-1) * 0.2, 2, 0, 0),
+        UDim2.new(0.19, -2, 1, 0)
+    )
     btnObjects[btnData.toggle] = btn
-    
-    btn.MouseButton1Click:Connect(function()
-        btnData.func()
-        local st = state[btnData.toggle]
-        if btnData.toggle == "autoRebirth" then
-            st = autoRebirthActive
-        end
-        btn.Text = btnData.text .. (st and " [ON]" or " [OFF]")
-        btn.BackgroundColor3 = st and Color3.fromRGB(200, 50, 50) or btnData.color
-        updateStats()
-    end)
 end
 
 -- ============================================================
@@ -897,51 +1003,54 @@ end
 local extraCategory = Instance.new("Frame")
 extraCategory.Parent = mainFrame
 extraCategory.BackgroundTransparency = 1
-extraCategory.Position = UDim2.new(0, 15, 0, 200)
-extraCategory.Size = UDim2.new(1, -30, 0, 45)
+extraCategory.Position = UDim2.new(0, 15, 0, 235)
+extraCategory.Size = UDim2.new(1, -30, 0, 60)
 
 local catTitle3 = Instance.new("TextLabel")
 catTitle3.Parent = extraCategory
 catTitle3.BackgroundTransparency = 1
-catTitle3.Position = UDim2.new(0, 0, 0, 0)
-catTitle3.Size = UDim2.new(0, 150, 0, 20)
+catTitle3.Position = UDim2.new(0, 5, 0, 0)
+catTitle3.Size = UDim2.new(0, 150, 0, 22)
 catTitle3.Font = Enum.Font.GothamBold
-catTitle3.Text = "EXTRAS"
+catTitle3.Text = "🔥 EXTRAS"
 catTitle3.TextColor3 = Color3.fromRGB(255, 150, 100)
 catTitle3.TextSize = 14
 catTitle3.TextXAlignment = Enum.TextXAlignment.Left
 
+local line3 = Instance.new("Frame")
+line3.Parent = extraCategory
+line3.BackgroundColor3 = Color3.fromRGB(255, 150, 100)
+line3.BackgroundTransparency = 0.8
+line3.BorderSizePixel = 0
+line3.Position = UDim2.new(0, 160, 0, 10)
+line3.Size = UDim2.new(1, -170, 0, 1)
+
 local btnFrame3 = Instance.new("Frame")
 btnFrame3.Parent = extraCategory
 btnFrame3.BackgroundTransparency = 1
-btnFrame3.Position = UDim2.new(0, 0, 0, 22)
-btnFrame3.Size = UDim2.new(1, 0, 0, 22)
+btnFrame3.Position = UDim2.new(0, 0, 0, 28)
+btnFrame3.Size = UDim2.new(1, 0, 0, 28)
 
 local extraButtons = {
-    {text = "FARM ALL", color = Color3.fromRGB(255, 50, 50), toggle = "farmAll", func = toggleFarmAll}
+    {text = "🔥 FARM ALL", color = Color3.fromRGB(255, 50, 50), toggle = "farmAll", func = toggleFarmAll}
 }
 
 for i, btnData in ipairs(extraButtons) do
-    local btn = Instance.new("TextButton")
-    btn.Parent = btnFrame3
-    btn.BackgroundColor3 = btnData.color
-    btn.BackgroundTransparency = 0.85
-    btn.BorderSizePixel = 0
-    btn.Position = UDim2.new((i-1) * 0.2, 2, 0, 0)
-    btn.Size = UDim2.new(0.19, -2, 1, 0)
-    btn.Font = Enum.Font.GothamBold
-    btn.Text = btnData.text .. " [OFF]"
-    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btn.TextSize = 11
+    local btn = createStyledButton(
+        btnFrame3,
+        btnData.text .. " [OFF]",
+        btnData.color,
+        function()
+            btnData.func()
+            local st = state[btnData.toggle]
+            btn.Text = btnData.text .. (st and " [ON]" or " [OFF]")
+            btn.BackgroundColor3 = st and Color3.fromRGB(200, 50, 50) or btnData.color
+            updateStats()
+        end,
+        UDim2.new((i-1) * 0.2, 2, 0, 0),
+        UDim2.new(0.19, -2, 1, 0)
+    )
     btnObjects[btnData.toggle] = btn
-    
-    btn.MouseButton1Click:Connect(function()
-        btnData.func()
-        local st = state[btnData.toggle]
-        btn.Text = btnData.text .. (st and " [ON]" or " [OFF]")
-        btn.BackgroundColor3 = st and Color3.fromRGB(200, 50, 50) or btnData.color
-        updateStats()
-    end)
 end
 
 -- ============================================================
@@ -951,74 +1060,97 @@ if isOwner then
     local adminCategory = Instance.new("Frame")
     adminCategory.Parent = mainFrame
     adminCategory.BackgroundTransparency = 1
-    adminCategory.Position = UDim2.new(0, 15, 0, 255)
-    adminCategory.Size = UDim2.new(1, -30, 0, 45)
+    adminCategory.Position = UDim2.new(0, 15, 0, 305)
+    adminCategory.Size = UDim2.new(1, -30, 0, 60)
     
     local catTitle4 = Instance.new("TextLabel")
     catTitle4.Parent = adminCategory
     catTitle4.BackgroundTransparency = 1
-    catTitle4.Position = UDim2.new(0, 0, 0, 0)
-    catTitle4.Size = UDim2.new(0, 150, 0, 20)
+    catTitle4.Position = UDim2.new(0, 5, 0, 0)
+    catTitle4.Size = UDim2.new(0, 200, 0, 22)
     catTitle4.Font = Enum.Font.GothamBold
     catTitle4.Text = "👑 ADMIN (Rivalsteam73)"
     catTitle4.TextColor3 = Color3.fromRGB(255, 215, 0)
     catTitle4.TextSize = 14
     catTitle4.TextXAlignment = Enum.TextXAlignment.Left
     
+    local line4 = Instance.new("Frame")
+    line4.Parent = adminCategory
+    line4.BackgroundColor3 = Color3.fromRGB(255, 215, 0)
+    line4.BackgroundTransparency = 0.8
+    line4.BorderSizePixel = 0
+    line4.Position = UDim2.new(0, 210, 0, 10)
+    line4.Size = UDim2.new(1, -220, 0, 1)
+    
     local btnFrame4 = Instance.new("Frame")
     btnFrame4.Parent = adminCategory
     btnFrame4.BackgroundTransparency = 1
-    btnFrame4.Position = UDim2.new(0, 0, 0, 22)
-    btnFrame4.Size = UDim2.new(1, 0, 0, 22)
+    btnFrame4.Position = UDim2.new(0, 0, 0, 28)
+    btnFrame4.Size = UDim2.new(1, 0, 0, 28)
     
     local adminButtons = {
-        {text = "SUGERENCIAS", color = Color3.fromRGB(255, 215, 0), toggle = "sugerencias", func = function() print("Sugerencias") end}
+        {text = "💡 SUGERENCIAS", color = Color3.fromRGB(255, 215, 0), toggle = "sugerencias", func = function() print("Sugerencias") end}
     }
     
     for i, btnData in ipairs(adminButtons) do
-        local btn = Instance.new("TextButton")
-        btn.Parent = btnFrame4
-        btn.BackgroundColor3 = btnData.color
-        btn.BackgroundTransparency = 0.85
-        btn.BorderSizePixel = 0
-        btn.Position = UDim2.new((i-1) * 0.2, 2, 0, 0)
-        btn.Size = UDim2.new(0.19, -2, 1, 0)
-        btn.Font = Enum.Font.GothamBold
-        btn.Text = btnData.text .. " [OFF]"
-        btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-        btn.TextSize = 11
+        local btn = createStyledButton(
+            btnFrame4,
+            btnData.text .. " [OFF]",
+            btnData.color,
+            function()
+                btnData.func()
+                local st = state[btnData.toggle]
+                btn.Text = btnData.text .. (st and " [ON]" or " [OFF]")
+                btn.BackgroundColor3 = st and Color3.fromRGB(200, 50, 50) or btnData.color
+            end,
+            UDim2.new((i-1) * 0.2, 2, 0, 0),
+            UDim2.new(0.19, -2, 1, 0)
+        )
         btnObjects[btnData.toggle] = btn
-        
-        btn.MouseButton1Click:Connect(function()
-            btnData.func()
-            local st = state[btnData.toggle]
-            btn.Text = btnData.text .. (st and " [ON]" or " [OFF]")
-            btn.BackgroundColor3 = st and Color3.fromRGB(200, 50, 50) or btnData.color
-        end)
     end
 end
 
 -- ============================================================
--- BOTÓN FLOTANTE PARA ABRIR/CERRAR
+-- BOTÓN FLOTANTE
 -- ============================================================
 local toggleBtn = Instance.new("TextButton")
 toggleBtn.Parent = screenGui
 toggleBtn.BackgroundColor3 = Color3.fromRGB(255, 215, 0)
 toggleBtn.BackgroundTransparency = 0.1
-toggleBtn.BorderSizePixel = 0
+toggleBtn.BorderSizePixel = 2
+toggleBtn.BorderColor3 = Color3.fromRGB(255, 215, 0)
 toggleBtn.Position = UDim2.new(0.02, 0, 0.02, 0)
-toggleBtn.Size = UDim2.new(0, 50, 0, 50)
+toggleBtn.Size = UDim2.new(0, 55, 0, 55)
 toggleBtn.Font = Enum.Font.GothamBold
 toggleBtn.Text = "👑"
 toggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggleBtn.TextSize = 24
+toggleBtn.TextSize = 26
 
 local toggleCorner = Instance.new("UICorner")
 toggleCorner.Parent = toggleBtn
 toggleCorner.CornerRadius = UDim.new(1, 0)
 
+-- Efecto de brillo en el botón flotante
+local floatGlow = Instance.new("Frame")
+floatGlow.Parent = toggleBtn
+floatGlow.BackgroundColor3 = Color3.fromRGB(255, 215, 0)
+floatGlow.BackgroundTransparency = 0.5
+floatGlow.BorderSizePixel = 0
+floatGlow.Size = UDim2.new(1.2, 0, 1.2, 0)
+floatGlow.Position = UDim2.new(-0.1, 0, -0.1, 0)
+floatGlow.ZIndex = 0
+
+local floatGlowCorner = Instance.new("UICorner")
+floatGlowCorner.Parent = floatGlow
+floatGlowCorner.CornerRadius = UDim.new(1, 0)
+
 toggleBtn.MouseButton1Click:Connect(function()
     mainFrame.Visible = not mainFrame.Visible
+    if mainFrame.Visible then
+        TweenService:Create(mainFrame, TweenInfo.new(0.3), {
+            BackgroundTransparency = 0.1
+        }):Play()
+    end
 end)
 
 -- ============================================================
@@ -1076,25 +1208,27 @@ end)
 -- ============================================================
 -- INICIALIZACIÓN
 -- ============================================================
-print("========================================")
-print("   ULTIMATE FARM v7.0 CARGADO")
+print("═══════════════════════════════════════════════════════════")
+print("   ✨ ULTIMATE FARM v8.0 CARGADO ✨")
 print("   Creado por: Rivalsteam73")
-print("========================================")
+print("═══════════════════════════════════════════════════════════")
 print("")
-print("  📌 GUI CREADO POR RIVALSTEAM73")
-print("  📌 TODOS LOS BOTONES SON TÁCTILES")
+print("  🎨 GUI COMPLETAMENTE REDISEÑADA")
+print("  📱 OPTIMIZADO PARA MÓVIL Y PC")
+print("  ⚡ EFECTOS VISUALES MEJORADOS")
 print("")
 print("  🎯 FUNCIONES DISPONIBLES:")
-print("  📡 Teleport    👻 Invisible    🏃 Treadmill")
-print("  👥 Clon Farm   🛡️ Anti-AFK    ⚡ Auto-Speed")
+print("  🛸 Teleport    👻 Invisible    🏃 Treadmill")
+print("  🧬 Clon Farm   🛡️ Anti-AFK    ⚡ Auto-Speed")
 print("  👑 Auto-Crowns  🌀 Aura        🔄 Auto-Rebirth")
 print("  🚶 Auto-Walk   🔥 Farm All")
 print("")
 print("  📌 Teclas PC: T I R C A S K U V W F B")
+print("  📌 Móvil: Toca los botones en pantalla")
 print("")
 print("  👑 Coronas: " .. tostring(coronas.Value))
 if progresoSpeed then
     print("  ⚡ Speed: " .. tostring(progresoSpeed.Value))
 end
 print("  📍 Zona-12: " .. (elements.partCorona and "✅ OK" or "❌ NO"))
-print("========================================")
+print("═══════════════════════════════════════════════════════════")
