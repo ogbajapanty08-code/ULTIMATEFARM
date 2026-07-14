@@ -1,297 +1,163 @@
---[[
-  ULTIMATE FARM v5.5 - GUI HORIZONTAL PROFESIONAL
-  Script completo para Speed for Crowns - Zona 12
-  Diseño horizontal con stats en una línea y botones organizados
-  ⚠️ Las opciones de Admin (Ver Sugerencias, Changelogs, Configuración) SOLO visibles para Rivalsteam73
---]]
+-- Script: ULTIMATE FARM v7.0
+-- Creador: Rivalsteam73
+-- Juego: Speed for Crowns
 
 -- ============================================================
--- 1. PANTALLA DE CARGA PROFESIONAL
+-- CONFIGURACIÓN INICIAL
 -- ============================================================
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
-local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
-local TweenService = game:GetService("TweenService")
 local Workspace = game:GetService("Workspace")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
--- Crear pantalla de carga
-local loadingGui = Instance.new("ScreenGui")
-loadingGui.Name = "LoadingScreen"
-loadingGui.ResetOnSpawn = false
-loadingGui.Parent = PlayerGui
-loadingGui.IgnoreGuiInset = true
-
--- Fondo
-local background = Instance.new("Frame")
-background.Parent = loadingGui
-background.BackgroundColor3 = Color3.fromRGB(8, 8, 20)
-background.BackgroundTransparency = 0
-background.BorderSizePixel = 0
-background.Size = UDim2.new(1, 0, 1, 0)
-
--- Logo
-local logoContainer = Instance.new("Frame")
-logoContainer.Parent = background
-logoContainer.BackgroundColor3 = Color3.fromRGB(255, 215, 0)
-logoContainer.BackgroundTransparency = 0.9
-logoContainer.BorderSizePixel = 2
-logoContainer.BorderColor3 = Color3.fromRGB(255, 215, 0)
-logoContainer.Position = UDim2.new(0.5, -50, 0.3, 0)
-logoContainer.Size = UDim2.new(0, 100, 0, 100)
-logoContainer.ClipsDescendants = true
-
-local logoCorner = Instance.new("UICorner")
-logoCorner.Parent = logoContainer
-logoCorner.CornerRadius = UDim.new(1, 0)
-
-local logoText = Instance.new("TextLabel")
-logoText.Parent = logoContainer
-logoText.BackgroundTransparency = 1
-logoText.Position = UDim2.new(0, 0, 0.15, 0)
-logoText.Size = UDim2.new(1, 0, 0.7, 0)
-logoText.Font = Enum.Font.GothamBold
-logoText.Text = "👑"
-logoText.TextColor3 = Color3.fromRGB(255, 215, 0)
-logoText.TextSize = 50
-logoText.TextScaled = true
-
--- Título
-local titleLabel = Instance.new("TextLabel")
-titleLabel.Parent = background
-titleLabel.BackgroundTransparency = 1
-titleLabel.Position = UDim2.new(0.5, -150, 0.47, 0)
-titleLabel.Size = UDim2.new(0, 300, 0, 40)
-titleLabel.Font = Enum.Font.GothamBold
-titleLabel.Text = "ULTIMATE FARM"
-titleLabel.TextColor3 = Color3.fromRGB(255, 215, 0)
-titleLabel.TextSize = 22
-titleLabel.TextScaled = true
-
--- Versión
-local versionLabel = Instance.new("TextLabel")
-versionLabel.Parent = background
-versionLabel.BackgroundTransparency = 1
-versionLabel.Position = UDim2.new(0.5, -150, 0.52, 0)
-versionLabel.Size = UDim2.new(0, 300, 0, 20)
-versionLabel.Font = Enum.Font.Gotham
-versionLabel.Text = "v5.5"
-versionLabel.TextColor3 = Color3.fromRGB(255, 215, 0)
-versionLabel.TextSize = 14
-versionLabel.TextScaled = true
-
--- Subtítulo
-local subtitleLabel = Instance.new("TextLabel")
-subtitleLabel.Parent = background
-subtitleLabel.BackgroundTransparency = 1
-subtitleLabel.Position = UDim2.new(0.5, -150, 0.57, 0)
-subtitleLabel.Size = UDim2.new(0, 300, 0, 25)
-subtitleLabel.Font = Enum.Font.Gotham
-subtitleLabel.Text = "CARGANDO..."
-subtitleLabel.TextColor3 = Color3.fromRGB(180, 180, 220)
-subtitleLabel.TextSize = 14
-subtitleLabel.TextScaled = true
-
--- Barra de progreso
-local progressContainer = Instance.new("Frame")
-progressContainer.Parent = background
-progressContainer.BackgroundColor3 = Color3.fromRGB(30, 30, 60)
-progressContainer.BackgroundTransparency = 0.5
-progressContainer.BorderSizePixel = 1
-progressContainer.BorderColor3 = Color3.fromRGB(50, 50, 100)
-progressContainer.Position = UDim2.new(0.5, -150, 0.65, 0)
-progressContainer.Size = UDim2.new(0, 300, 0, 8)
-
-local progressCorner = Instance.new("UICorner")
-progressCorner.Parent = progressContainer
-progressCorner.CornerRadius = UDim.new(0, 4)
-
-local progressBar = Instance.new("Frame")
-progressBar.Parent = progressContainer
-progressBar.BackgroundColor3 = Color3.fromRGB(255, 215, 0)
-progressBar.BorderSizePixel = 0
-progressBar.Size = UDim2.new(0, 0, 1, 0)
-
-local progressBarCorner = Instance.new("UICorner")
-progressBarCorner.Parent = progressBar
-progressBarCorner.CornerRadius = UDim.new(0, 4)
-
--- Porcentaje
-local percentLabel = Instance.new("TextLabel")
-percentLabel.Parent = background
-percentLabel.BackgroundTransparency = 1
-percentLabel.Position = UDim2.new(0.5, -150, 0.70, 0)
-percentLabel.Size = UDim2.new(0, 300, 0, 20)
-percentLabel.Font = Enum.Font.Gotham
-percentLabel.Text = "0%"
-percentLabel.TextColor3 = Color3.fromRGB(255, 215, 0)
-percentLabel.TextSize = 13
-
--- Animación del logo
-task.spawn(function()
-    while loadingGui.Parent do
-        for i = 0.8, 1.2, 0.05 do
-            if not loadingGui.Parent then break end
-            logoContainer.Size = UDim2.new(0, 100 * i, 0, 100 * i)
-            task.wait(0.03)
-        end
-        for i = 1.2, 0.8, -0.05 do
-            if not loadingGui.Parent then break end
-            logoContainer.Size = UDim2.new(0, 100 * i, 0, 100 * i)
-            task.wait(0.03)
-        end
-    end
-end)
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
 -- ============================================================
--- 2. CONFIGURACIÓN DEL SCRIPT
+-- CONFIGURACIÓN DEL SCRIPT
 -- ============================================================
 local scriptConfig = {
-    version = "v5.5",
-    versionDate = "13/07/2026",
+    version = "v7.0",
+    versionDate = "14/07/2026",
     changelogs = {
-        {version = "v5.5", date = "13/07/2026", changes = {
-            "✅ GUI rediseñada en formato horizontal",
-            "✅ Stats en una sola línea",
-            "✅ Botones organizados en filas",
-            "✅ Menú Principal y Utilidades separados",
-            "✅ Sistema de sugerencias y changelogs",
-            "✅ Opciones Admin ocultas para otros usuarios"
-        }},
-        {version = "v5.0", date = "12/07/2026", changes = {
-            "✅ Clon Farm x2 agregado",
-            "✅ Anti-AFK implementado"
+        {version = "v7.0", date = "14/07/2026", changes = {
+            "GUI CREADO POR RIVALSTEAM73",
+            "DISEÑO CON COLORES UNICOS",
+            "PANELES DE CATEGORIA",
+            "BOTONES ORGANIZADOS"
         }}
     }
 }
 
+local isOwner = (LocalPlayer.Name == "Rivalsteam73")
+
 -- ============================================================
--- 3. FUNCIÓN DE CARGA
+-- REFERENCIAS DEL JUGADOR
 -- ============================================================
-local function loadMainScript()
-    versionLabel.Text = scriptConfig.version
+local leaderstats = LocalPlayer:WaitForChild("leaderstats")
+local coronas = leaderstats:WaitForChild("Coronas")
+local wins = leaderstats:FindFirstChild("Wins") or leaderstats:GetChildren()[1]
+local progresoSpeed = LocalPlayer:FindFirstChild("ProgresoSpeed")
+local metaSpeed = LocalPlayer:FindFirstChild("MetaSpeed")
+local levelValue = LocalPlayer:FindFirstChild("LevelValue")
+local rebirths = LocalPlayer:FindFirstChild("Rebirths")
+local level = leaderstats:FindFirstChild("Level")
 
-    TweenService:Create(background, TweenInfo.new(0.5), {
-        BackgroundTransparency = 1
-    }):Play()
-    task.wait(0.5)
-    loadingGui:Destroy()
+-- ============================================================
+-- VARIABLES DE ESTADO
+-- ============================================================
+local state = {
+    teleport = false,
+    invisible = false,
+    treadmill = false,
+    clon = false,
+    antiAFK = false,
+    autoSpeed = false,
+    autoCrowns = false,
+    auraActive = false,
+    farmAll = false,
+    autoRebirth = false,
+    autoWalk = false
+}
 
-    -- ============================================================
-    -- 4. SCRIPT PRINCIPAL
-    -- ============================================================
+local connections = {}
+local savedProps = {}
+local clones = {}
+local auraParts = {}
+local elements = {}
+local autoRebirthActive = false
+local autoRebirthConn = nil
 
+-- ============================================================
+-- BUSCAR ELEMENTOS
+-- ============================================================
+local function findElements()
+    elements = {winPads = {}, treadmills = {}, stages = {}, partCorona = nil, treadmillPart = nil}
+    
     local zonas = Workspace:FindFirstChild("Zonas")
     local zona12 = zonas and zonas:FindFirstChild("Zona-12")
-    local partCorona = nil
-    local treadmillPart = nil
-
+    
     if zona12 then
-        partCorona = zona12:FindFirstChild("Part")
-        if not partCorona then
-            for _, child in ipairs(zona12:GetChildren()) do
-                if child:IsA("BasePart") then
-                    partCorona = child
-                    break
-                end
-            end
-        end
-        if not partCorona then
-            local parts = zona12:FindFirstChild("Parts")
-            if parts then
-                for _, child in ipairs(parts:GetChildren()) do
-                    if child:IsA("BasePart") then
-                        partCorona = child
-                        break
-                    end
-                end
-            end
-        end
-
+        elements.partCorona = zona12:FindFirstChild("Part") or zona12:FindFirstChildWhichIsA("BasePart")
         for _, child in ipairs(zona12:GetDescendants()) do
-            if child:IsA("BasePart") then
-                local name = child.Name:lower()
-                if name:find("tread") or name:find("cinta") or name:find("runner") or name:find("speed") or name:find("camin") then
-                    treadmillPart = child
-                    break
-                end
+            if child:IsA("BasePart") and child.Name:lower():find("tread") then
+                elements.treadmillPart = child
+                break
             end
         end
     end
-
-    local leaderstats = LocalPlayer:WaitForChild("leaderstats")
-    local coronas = leaderstats:WaitForChild("Coronas")
-    local progresoSpeed = LocalPlayer:FindFirstChild("ProgresoSpeed")
-    local metaSpeed = LocalPlayer:FindFirstChild("MetaSpeed")
-
-    local state = {
-        teleport = false,
-        invisible = false,
-        treadmill = false,
-        clon = false,
-        antiAFK = false,
-        guiVisible = true
-    }
-
-    local connections = {}
-    local savedProps = {}
-    local clones = {}
     
-    -- ✅ VERIFICACIÓN DE USUARIO (SOLO Rivalsteam73)
-    local isOwner = (LocalPlayer.Name == "Rivalsteam73")
-    
-    local suggestions = {}
-    local suggestionCount = 0
-
-    -- FUNCIONES PRINCIPALES
-    local function teleportToZona12()
-        if not partCorona then return false end
-        local char = LocalPlayer.Character
-        if not char then return false end
-        local root = char:FindFirstChild("HumanoidRootPart")
-        if not root then return false end
-        root.CFrame = CFrame.new(partCorona.Position + Vector3.new(0, 3, 0))
-        return true
-    end
-
-    local function teleportToTreadmill()
-        if treadmillPart then
-            local char = LocalPlayer.Character
-            if not char then return false end
-            local root = char:FindFirstChild("HumanoidRootPart")
-            if not root then return false end
-            root.CFrame = CFrame.new(treadmillPart.Position + Vector3.new(0, 2, 0))
-            return true
+    local winPadsFolder = Workspace:FindFirstChild("WinPads") or Workspace:FindFirstChild("Worlds")
+    if winPadsFolder then
+        for _, child in ipairs(winPadsFolder:GetDescendants()) do
+            if child:IsA("Model") and child.Name:match("Stage%d+WinPad") then
+                table.insert(elements.winPads, child)
+            end
         end
-        return teleportToZona12()
     end
+    
+    local treadmillsFolder = Workspace:FindFirstChild("Treadmills") or Workspace:FindFirstChild("Worlds")
+    if treadmillsFolder then
+        for _, child in ipairs(treadmillsFolder:GetDescendants()) do
+            if child:IsA("Model") and child.Name:match("Treadmill") then
+                table.insert(elements.treadmills, child)
+            end
+        end
+    end
+end
 
-    local function toggleTeleport()
-        state.teleport = not state.teleport
-        if state.teleport then
+findElements()
+
+-- ============================================================
+-- FUNCIONES PRINCIPALES
+-- ============================================================
+
+local function toggleState(name, onFunc, offFunc)
+    state[name] = not state[name]
+    if state[name] then onFunc() else offFunc() end
+    return state[name]
+end
+
+-- TELEPORT
+local function teleportToZona12()
+    if not elements.partCorona then return false end
+    local char = LocalPlayer.Character
+    if not char then return false end
+    local root = char:FindFirstChild("HumanoidRootPart")
+    if not root then return false end
+    root.CFrame = CFrame.new(elements.partCorona.Position + Vector3.new(0, 3, 0))
+    return true
+end
+
+local function toggleTeleport()
+    toggleState("teleport",
+        function()
             teleportToZona12()
             local conn = RunService.Heartbeat:Connect(function()
                 if state.teleport then teleportToZona12() end
             end)
             table.insert(connections, conn)
-            print("✅ Teleport activado")
-        else
+            print("Teleport activado")
+        end,
+        function()
             for i, conn in ipairs(connections) do
-                if conn then conn:Disconnect() end
+                conn:Disconnect()
             end
             connections = {}
-            print("❌ Teleport desactivado")
+            print("Teleport desactivado")
         end
-    end
+    )
+end
 
-    local function toggleInvisible()
-        local char = LocalPlayer.Character
-        if not char then return end
-
-        state.invisible = not state.invisible
-
-        if state.invisible then
+-- INVISIBLE
+local function toggleInvisible()
+    local char = LocalPlayer.Character
+    if not char then return end
+    
+    toggleState("invisible",
+        function()
             for _, part in ipairs(char:GetDescendants()) do
                 if part:IsA("BasePart") then
                     savedProps[part] = {
@@ -301,25 +167,21 @@ local function loadMainScript()
                         CanQuery = part.CanQuery
                     }
                     part.Transparency = 1
-                    part.CanCollide = false
-                    part.CanTouch = false
-                    part.CanQuery = false
+                    part.CanTouch = true
+                    part.CanQuery = true
                 end
             end
-
             for _, acc in ipairs(char:GetChildren()) do
                 if acc:IsA("Accessory") or acc:IsA("Hat") or acc:IsA("Clothing") then
                     savedProps[acc] = acc.Enabled
                     acc.Enabled = false
                 end
             end
-
             local nameDisplay = char:FindFirstChild("NameDisplay")
             if nameDisplay then
                 savedProps[nameDisplay] = nameDisplay.Visible
                 nameDisplay.Visible = false
             end
-
             local conn = char.ChildAdded:Connect(function(child)
                 task.wait(0.1)
                 if child:IsA("BasePart") then
@@ -330,14 +192,14 @@ local function loadMainScript()
                         CanQuery = child.CanQuery
                     }
                     child.Transparency = 1
-                    child.CanCollide = false
-                    child.CanTouch = false
-                    child.CanQuery = false
+                    child.CanTouch = true
+                    child.CanQuery = true
                 end
             end)
             table.insert(connections, conn)
-            print("✅ Invisibilidad TOTAL activada")
-        else
+            print("Invisibilidad activada")
+        end,
+        function()
             for obj, props in pairs(savedProps) do
                 if obj and obj.Parent then
                     if typeof(props) == "table" then
@@ -350,26 +212,38 @@ local function loadMainScript()
                 end
             end
             savedProps = {}
-
             for _, acc in ipairs(char:GetChildren()) do
                 if acc:IsA("Accessory") or acc:IsA("Hat") or acc:IsA("Clothing") then
-                    acc.Enabled = true
+                    pcall(function()
+                        acc.Enabled = true
+                    end)
                 end
             end
-
             local nameDisplay = char:FindFirstChild("NameDisplay")
             if nameDisplay then
                 nameDisplay.Visible = true
             end
-
-            print("❌ Invisibilidad desactivada")
+            print("Invisibilidad desactivada")
         end
+    )
+end
+
+-- TREADMILL
+local function teleportToTreadmill()
+    if elements.treadmillPart then
+        local char = LocalPlayer.Character
+        if not char then return false end
+        local root = char:FindFirstChild("HumanoidRootPart")
+        if not root then return false end
+        root.CFrame = CFrame.new(elements.treadmillPart.Position + Vector3.new(0, 2, 0))
+        return true
     end
+    return teleportToZona12()
+end
 
-    local function toggleTreadmill()
-        state.treadmill = not state.treadmill
-
-        if state.treadmill then
+local function toggleTreadmill()
+    toggleState("treadmill",
+        function()
             teleportToTreadmill()
             local conn = RunService.Heartbeat:Connect(function()
                 if not state.treadmill then return end
@@ -378,993 +252,849 @@ local function loadMainScript()
                 local root = char:FindFirstChild("HumanoidRootPart")
                 local humanoid = char:FindFirstChild("Humanoid")
                 if not root or not humanoid then return end
-
-                if treadmillPart then
-                    local pos = treadmillPart.Position
-                    root.CFrame = CFrame.new(pos + Vector3.new(0, 2, 0))
-                    root.Velocity = Vector3.new(math.sin(tick() * 8) * 0.5, 0, 8)
-                    humanoid.WalkSpeed = 16
-                    humanoid:MoveTo(root.Position + Vector3.new(0, 0, 10))
-                else
-                    local cam = Workspace.CurrentCamera
-                    if cam then
-                        local dir = cam.CFrame.LookVector * Vector3.new(1, 0, 1)
-                        root.Velocity = Vector3.new(dir.X * 16, root.Velocity.Y, dir.Z * 16)
-                    end
-                end
+                local pos = elements.treadmillPart and elements.treadmillPart.Position or root.Position
+                root.CFrame = CFrame.new(pos + Vector3.new(0, 2, 0))
+                root.Velocity = Vector3.new(math.sin(tick() * 8) * 0.5, 0, 8)
+                humanoid.WalkSpeed = 16
+                humanoid:MoveTo(root.Position + Vector3.new(0, 0, 10))
             end)
             table.insert(connections, conn)
-            print("✅ Auto-Treadmill activado")
-        else
-            print("❌ Auto-Treadmill desactivado")
+            print("Treadmill activado")
+        end,
+        function()
+            print("Treadmill desactivado")
         end
-    end
+    )
+end
 
-    local function toggleAntiAFK()
-        state.antiAFK = not state.antiAFK
+-- CLON FARM
+local function toggleClon()
+    toggleState("clon",
+        function()
+            if not elements.partCorona then
+                print("Zona-12 no encontrada")
+                state.clon = false
+                return
+            end
+            local char = LocalPlayer.Character
+            if not char then
+                print("No hay personaje")
+                state.clon = false
+                return
+            end
+            
+            local clon = char:Clone()
+            clon.Name = "ClonFarm"
+            clon.Parent = Workspace
+            for _, part in ipairs(clon:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    part.Transparency = 1
+                    part.CanCollide = true
+                    part.CanTouch = true
+                    part.Material = Enum.Material.SmoothPlastic
+                end
+                if part:IsA("Decal") or part:IsA("Texture") or part:IsA("Sound") then
+                    part:Destroy()
+                end
+            end
+            local clonHumanoid = clon:FindFirstChild("Humanoid")
+            if clonHumanoid then
+                clonHumanoid.WalkSpeed = 0
+                clonHumanoid.JumpPower = 0
+                clonHumanoid.PlatformStand = true
+            end
+            local clonRoot = clon:FindFirstChild("HumanoidRootPart")
+            if clonRoot then
+                clonRoot.CFrame = CFrame.new(elements.partCorona.Position + Vector3.new(0, 2.5, 0))
+            end
+            
+            local touchPart = Instance.new("Part")
+            touchPart.Name = "TouchPart"
+            touchPart.Size = Vector3.new(2, 2, 2)
+            touchPart.Transparency = 1
+            touchPart.CanCollide = true
+            touchPart.CanTouch = true
+            touchPart.Anchored = true
+            touchPart.Position = elements.partCorona.Position + Vector3.new(0, 2.5, 0)
+            touchPart.Parent = clon
+            
+            local clickDetector = Instance.new("ClickDetector")
+            clickDetector.Parent = touchPart
+            clickDetector.MouseClick:Connect(function(player)
+                if player == LocalPlayer then
+                    pcall(function()
+                        coronas.Value = coronas.Value + 1
+                    end)
+                end
+            end)
+            
+            local stayConn = RunService.Heartbeat:Connect(function()
+                if not clon.Parent then return end
+                if clonRoot and elements.partCorona then
+                    clonRoot.CFrame = CFrame.new(elements.partCorona.Position + Vector3.new(0, 2.5, 0))
+                    clonRoot.Velocity = Vector3.new(0, 0, 0)
+                end
+                if touchPart and elements.partCorona then
+                    touchPart.Position = elements.partCorona.Position + Vector3.new(0, 2.5, 0)
+                end
+            end)
+            
+            local touchConn = RunService.Heartbeat:Connect(function()
+                if not clon.Parent then return end
+                if elements.partCorona then
+                    pcall(function()
+                        clickDetector:FireServer()
+                    end)
+                    pcall(function()
+                        coronas.Value = coronas.Value + 1
+                    end)
+                end
+            end)
+            
+            clones = {
+                clon = clon,
+                root = clonRoot,
+                touchPart = touchPart,
+                clickDetector = clickDetector,
+                connections = {stayConn, touchConn}
+            }
+            print("Clones activos farmeando coronas")
+        end,
+        function()
+            for _, clonData in ipairs(clones) do
+                if clonData.clon and clonData.clon.Parent then
+                    clonData.clon:Destroy()
+                end
+                for _, conn in ipairs(clonData.connections or {}) do
+                    if conn then
+                        conn:Disconnect()
+                    end
+                end
+            end
+            clones = {}
+            print("Clones eliminados")
+        end
+    )
+end
 
-        if state.antiAFK then
+-- ANTI-AFK
+local function toggleAntiAFK()
+    toggleState("antiAFK",
+        function()
             local conn = RunService.Heartbeat:Connect(function()
                 if not state.antiAFK then return end
                 local char = LocalPlayer.Character
                 if char then
                     local root = char:FindFirstChild("HumanoidRootPart")
                     if root then
-                        root.Velocity = Vector3.new(math.random(-1,1)*0.01, 0, math.random(-1,1)*0.01)
+                        root.Velocity = Vector3.new(math.random(-1, 1) * 0.01, 0, math.random(-1, 1) * 0.01)
                     end
                 end
             end)
             table.insert(connections, conn)
-            print("✅ Anti-AFK activado")
-        else
-            print("❌ Anti-AFK desactivado")
+            print("Anti-AFK activado")
+        end,
+        function()
+            print("Anti-AFK desactivado")
         end
-    end
+    )
+end
 
-    local function giveCoronas(cantidad)
-        pcall(function()
-            coronas.Value = coronas.Value + cantidad
-        end)
-    end
-
-    local function createClon()
-        if not partCorona then
-            print("❌ Zona-12 no encontrada")
-            return nil
+-- AUTO-SPEED
+local function toggleAutoSpeed()
+    toggleState("autoSpeed",
+        function()
+            local conn = RunService.Heartbeat:Connect(function()
+                if not state.autoSpeed then return end
+                if progresoSpeed and metaSpeed then
+                    progresoSpeed.Value = progresoSpeed.Value + 1000
+                    if progresoSpeed.Value > metaSpeed.Value then
+                        metaSpeed.Value = progresoSpeed.Value + 10000
+                    end
+                end
+            end)
+            table.insert(connections, conn)
+            print("Auto-Speed activado")
+        end,
+        function()
+            print("Auto-Speed desactivado")
         end
+    )
+end
 
-        local char = LocalPlayer.Character
-        if not char then
-            print("❌ No hay personaje")
-            return nil
+-- AUTO-CROWNS
+local function toggleAutoCrowns()
+    toggleState("autoCrowns",
+        function()
+            local conn = RunService.Heartbeat:Connect(function()
+                if not state.autoCrowns then return end
+                pcall(function()
+                    coronas.Value = coronas.Value + 100
+                end)
+            end)
+            table.insert(connections, conn)
+            print("Auto-Crowns activado")
+        end,
+        function()
+            print("Auto-Crowns desactivado")
         end
+    )
+end
 
-        local clon = char:Clone()
-        clon.Name = "ClonFarm"
-        clon.Parent = Workspace
-
-        for _, part in ipairs(clon:GetDescendants()) do
-            if part:IsA("BasePart") then
-                part.Transparency = 1
-                part.CanCollide = true
-                part.CanTouch = true
-                part.Material = Enum.Material.SmoothPlastic
-            end
-            if part:IsA("Decal") or part:IsA("Texture") or part:IsA("Sound") then
-                part:Destroy()
-            end
-        end
-
-        local clonHumanoid = clon:FindFirstChild("Humanoid")
-        if clonHumanoid then
-            clonHumanoid.WalkSpeed = 0
-            clonHumanoid.JumpPower = 0
-            clonHumanoid.PlatformStand = true
-            for _, anim in ipairs(clonHumanoid:GetChildren()) do
-                if anim:IsA("Animator") then
-                    anim:Destroy()
+-- AURA
+local function toggleAura()
+    if state.auraActive then
+        for _, part in ipairs(auraParts) do
+            if part then
+                if type(part) == "RBXScriptConnection" then
+                    pcall(function()
+                        part:Disconnect()
+                    end)
+                elseif part:IsA("BasePart") or part:IsA("SelectionBox") then
+                    pcall(function()
+                        part:Destroy()
+                    end)
                 end
             end
         end
-
-        local clonRoot = clon:FindFirstChild("HumanoidRootPart")
-        if clonRoot then
-            clonRoot.CFrame = CFrame.new(partCorona.Position + Vector3.new(0, 2.5, 0))
-        end
-
-        local touchPart = Instance.new("Part")
-        touchPart.Name = "TouchPart"
-        touchPart.Size = Vector3.new(2, 2, 2)
-        touchPart.Transparency = 1
-        touchPart.CanCollide = true
-        touchPart.CanTouch = true
-        touchPart.Anchored = true
-        touchPart.Position = partCorona.Position + Vector3.new(0, 2.5, 0)
-        touchPart.Parent = clon
-
-        local clickDetector = Instance.new("ClickDetector")
-        clickDetector.Parent = touchPart
-
-        clickDetector.MouseClick:Connect(function(player)
-            if player == LocalPlayer then
-                giveCoronas(1)
-            end
-        end)
-
-        local stayConn = RunService.Heartbeat:Connect(function()
-            if not clon.Parent then return end
-            if clonRoot and partCorona then
-                clonRoot.CFrame = CFrame.new(partCorona.Position + Vector3.new(0, 2.5, 0))
-                clonRoot.Velocity = Vector3.new(0, 0, 0)
-            end
-            if touchPart and partCorona then
-                touchPart.Position = partCorona.Position + Vector3.new(0, 2.5, 0)
-            end
-        end)
-
-        local touchConn = RunService.Heartbeat:Connect(function()
-            if not clon.Parent then return end
-            if partCorona then
+        auraParts = {}
+        state.auraActive = false
+        print("Aura desactivada")
+        return
+    end
+    
+    local char = LocalPlayer.Character
+    if not char then
+        print("No hay personaje")
+        return
+    end
+    local rootPart = char:FindFirstChild("HumanoidRootPart")
+    if not rootPart then
+        print("No hay HumanoidRootPart")
+        return
+    end
+    
+    state.auraActive = true
+    
+    local aura = Instance.new("Part")
+    aura.Name = "AuraProximidad"
+    aura.Size = Vector3.new(100, 100, 100)
+    aura.Transparency = 0.95
+    aura.CanCollide = false
+    aura.CanTouch = true
+    aura.Anchored = false
+    aura.Material = Enum.Material.SmoothPlastic
+    aura.Color = Color3.fromRGB(255, 215, 0)
+    aura.Parent = rootPart
+    
+    local auraEffect = Instance.new("SelectionBox")
+    auraEffect.Parent = aura
+    auraEffect.Color3 = Color3.fromRGB(255, 215, 0)
+    auraEffect.Transparency = 0.9
+    auraEffect.LineThickness = 0.1
+    
+    local touchConn = aura.Touched:Connect(function(hit)
+        if not state.auraActive then return end
+        for _, pad in ipairs(elements.winPads) do
+            if hit == pad or hit.Parent == pad then
                 pcall(function()
-                    clickDetector:FireServer()
+                    local click = pad:FindFirstChildOfClass("ClickDetector")
+                    if click then
+                        click:FireServer()
+                    end
+                    local touchPart = pad:FindFirstChild("Touch")
+                    if touchPart then
+                        touchPart.Touched:Fire(hit)
+                    end
                 end)
-                giveCoronas(1)
+            end
+        end
+        for _, tm in ipairs(elements.treadmills) do
+            if hit == tm or hit.Parent == tm then
+                pcall(function()
+                    local click = tm:FindFirstChildOfClass("ClickDetector")
+                    if click then
+                        click:FireServer()
+                    end
+                end)
+            end
+        end
+    end)
+    
+    local stayConn = RunService.Heartbeat:Connect(function()
+        if not state.auraActive then return end
+        local char = LocalPlayer.Character
+        if not char then return end
+        local root = char:FindFirstChild("HumanoidRootPart")
+        if not root then return end
+        if aura and aura.Parent then
+            aura.CFrame = root.CFrame
+        end
+    end)
+    
+    auraParts = {aura, auraEffect, touchConn, stayConn}
+    print("Aura activada")
+end
+
+-- AUTO-WALK
+local function toggleAutoWalk()
+    toggleState("autoWalk",
+        function()
+            local conn = RunService.Heartbeat:Connect(function()
+                if not state.autoWalk then return end
+                local char = LocalPlayer.Character
+                if not char then return end
+                local root = char:FindFirstChild("HumanoidRootPart")
+                local humanoid = char:FindFirstChild("Humanoid")
+                if not root or not humanoid then return end
+                local cam = Workspace.CurrentCamera
+                if cam then
+                    local forward = cam.CFrame.LookVector * Vector3.new(1, 0, 1)
+                    if forward.Magnitude < 0.1 then
+                        forward = Vector3.new(0, 0, -1)
+                    end
+                    forward = forward.Unit
+                    root.Velocity = Vector3.new(forward.X * 16, root.Velocity.Y, forward.Z * 16)
+                    humanoid.WalkSpeed = 16
+                    humanoid:MoveTo(root.Position + forward * 10)
+                end
+            end)
+            table.insert(connections, conn)
+            print("Auto-Walk activado")
+        end,
+        function()
+            print("Auto-Walk desactivado")
+        end
+    )
+end
+
+-- AUTO-REBIRTH
+local rebirthEvent = ReplicatedStorage:FindFirstChild("RebirthEvent")
+local rebirthRequirements = {
+    [0] = {Nivel = 30, Coronas = 20000},
+    [1] = {Nivel = 40, Coronas = 50000},
+    [2] = {Nivel = 100, Coronas = 1000000},
+    [3] = {Nivel = 200, Coronas = 20000000}
+}
+
+local function canRebirth()
+    if not levelValue or not rebirths or not coronas then return false end
+    local req = rebirthRequirements[rebirths.Value]
+    return req and levelValue.Value >= req.Nivel and coronas.Value >= req.Coronas
+end
+
+local function doRebirth()
+    if rebirthEvent and canRebirth() then
+        pcall(function()
+            rebirthEvent:FireServer()
+            print("Rebirth ejecutado!")
+        end)
+    end
+end
+
+local function toggleAutoRebirth()
+    autoRebirthActive = not autoRebirthActive
+    if autoRebirthActive then
+        doRebirth()
+        autoRebirthConn = RunService.Heartbeat:Connect(function()
+            if autoRebirthActive and canRebirth() then
+                doRebirth()
             end
         end)
+        print("Auto-Rebirth activado")
+    else
+        if autoRebirthConn then
+            autoRebirthConn:Disconnect()
+            autoRebirthConn = nil
+        end
+        print("Auto-Rebirth desactivado")
+    end
+    state.autoRebirth = autoRebirthActive
+end
 
-        local clonData = {
-            clon = clon,
-            root = clonRoot,
-            touchPart = touchPart,
-            clickDetector = clickDetector,
-            connections = {stayConn, touchConn}
+-- FARM ALL
+local function toggleFarmAll()
+    state.farmAll = not state.farmAll
+    
+    if state.farmAll then
+        local allFunctions = {
+            {name = "teleport", func = toggleTeleport, active = state.teleport},
+            {name = "treadmill", func = toggleTreadmill, active = state.treadmill},
+            {name = "clon", func = toggleClon, active = state.clon},
+            {name = "antiAFK", func = toggleAntiAFK, active = state.antiAFK},
+            {name = "autoSpeed", func = toggleAutoSpeed, active = state.autoSpeed},
+            {name = "autoCrowns", func = toggleAutoCrowns, active = state.autoCrowns},
+            {name = "auraActive", func = toggleAura, active = state.auraActive},
+            {name = "autoRebirth", func = toggleAutoRebirth, active = state.autoRebirth},
+            {name = "autoWalk", func = toggleAutoWalk, active = state.autoWalk}
         }
-
-        table.insert(clones, clonData)
-        print("✅ Clon creado")
-        return clonData
-    end
-
-    local function destroyAllClones()
-        for _, clonData in ipairs(clones) do
-            if clonData.clon and clonData.clon.Parent then
-                clonData.clon:Destroy()
-            end
-            for _, conn in ipairs(clonData.connections or {}) do
-                if conn then conn:Disconnect() end
+        for _, f in ipairs(allFunctions) do
+            if not f.active then
+                f.func()
+                task.wait(0.1)
             end
         end
-        clones = {}
-        print("❌ Clones eliminados")
-    end
-
-    local function toggleClon()
-        state.clon = not state.clon
-
-        if state.clon then
-            createClon()
-            task.wait(0.2)
-            createClon()
-            print("✅ 2 Clones activos farmeando coronas")
-        else
-            destroyAllClones()
+        print("Farm All activado")
+    else
+        local allFunctions = {
+            {name = "teleport", func = toggleTeleport, active = state.teleport},
+            {name = "treadmill", func = toggleTreadmill, active = state.treadmill},
+            {name = "clon", func = toggleClon, active = state.clon},
+            {name = "antiAFK", func = toggleAntiAFK, active = state.antiAFK},
+            {name = "autoSpeed", func = toggleAutoSpeed, active = state.autoSpeed},
+            {name = "autoCrowns", func = toggleAutoCrowns, active = state.autoCrowns},
+            {name = "auraActive", func = toggleAura, active = state.auraActive},
+            {name = "autoRebirth", func = toggleAutoRebirth, active = state.autoRebirth},
+            {name = "autoWalk", func = toggleAutoWalk, active = state.autoWalk}
+        }
+        for _, f in ipairs(allFunctions) do
+            if f.active then
+                f.func()
+                task.wait(0.1)
+            end
         end
+        print("Farm All desactivado")
     end
+end
 
-    -- ============================================================
-    -- 5. GUI HORIZONTAL PROFESIONAL
-    -- ============================================================
+-- ============================================================
+-- CREAR GUI ESTILO JMODS
+-- ============================================================
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "UltimateFarm"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = PlayerGui
 
-    local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = "UltimateFarm"
-    screenGui.ResetOnSpawn = false
-    screenGui.Parent = PlayerGui
+-- Frame principal
+local mainFrame = Instance.new("Frame")
+mainFrame.Parent = screenGui
+mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+mainFrame.BackgroundTransparency = 0.05
+mainFrame.BorderSizePixel = 0
+mainFrame.Position = UDim2.new(0.5, -300, 0.05, 0)
+mainFrame.Size = UDim2.new(0, 600, 0, 500)
+mainFrame.ClipsDescendants = true
+mainFrame.Active = true
+mainFrame.Draggable = true
 
-    -- Botón flotante para abrir/cerrar
-    local toggleBtn = Instance.new("TextButton")
-    toggleBtn.Parent = screenGui
-    toggleBtn.BackgroundColor3 = Color3.fromRGB(255, 215, 0)
-    toggleBtn.BackgroundTransparency = 0.1
-    toggleBtn.BorderSizePixel = 0
-    toggleBtn.Position = UDim2.new(0.02, 0, 0.02, 0)
-    toggleBtn.Size = UDim2.new(0, 45, 0, 45)
-    toggleBtn.Font = Enum.Font.GothamBold
-    toggleBtn.Text = "👑"
-    toggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    toggleBtn.TextSize = 22
+local mainCorner = Instance.new("UICorner")
+mainCorner.Parent = mainFrame
+mainCorner.CornerRadius = UDim.new(0, 12)
 
-    local toggleCorner = Instance.new("UICorner")
-    toggleCorner.Parent = toggleBtn
-    toggleCorner.CornerRadius = UDim.new(1, 0)
+-- Sombra
+local shadow = Instance.new("Frame")
+shadow.Parent = mainFrame
+shadow.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+shadow.BackgroundTransparency = 0.7
+shadow.BorderSizePixel = 0
+shadow.Position = UDim2.new(0, 5, 0, 5)
+shadow.Size = UDim2.new(1, 10, 1, 10)
+shadow.ZIndex = 0
 
-    -- FRAME PRINCIPAL (HORIZONTAL)
-    local mainFrame = Instance.new("Frame")
-    mainFrame.Parent = screenGui
-    mainFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 25)
-    mainFrame.BackgroundTransparency = 0.05
-    mainFrame.BorderSizePixel = 1
-    mainFrame.BorderColor3 = Color3.fromRGB(255, 215, 0)
-    mainFrame.Position = UDim2.new(0.05, 0, 0.08, 0)
-    mainFrame.Size = UDim2.new(0, 750, 0, 250)
-    mainFrame.ClipsDescendants = true
-    mainFrame.Active = true
-    mainFrame.Draggable = true
+-- ============================================================
+-- BARRA SUPERIOR (Título + Stats)
+-- ============================================================
+local topBar = Instance.new("Frame")
+topBar.Parent = mainFrame
+topBar.BackgroundColor3 = Color3.fromRGB(30, 30, 45)
+topBar.BorderSizePixel = 0
+topBar.Size = UDim2.new(1, 0, 0, 80)
 
-    local mainCorner = Instance.new("UICorner")
-    mainCorner.Parent = mainFrame
-    mainCorner.CornerRadius = UDim.new(0, 10)
+local topCorner = Instance.new("UICorner")
+topCorner.Parent = topBar
+topCorner.CornerRadius = UDim.new(0, 12)
 
-    -- ============================================================
-    -- 6. BARRA DE TÍTULO
-    -- ============================================================
-    local titleBar = Instance.new("Frame")
-    titleBar.Parent = mainFrame
-    titleBar.BackgroundColor3 = Color3.fromRGB(20, 20, 40)
-    titleBar.BorderSizePixel = 0
-    titleBar.Size = UDim2.new(1, 0, 0, 35)
+-- Título
+local title = Instance.new("TextLabel")
+title.Parent = topBar
+title.BackgroundTransparency = 1
+title.Position = UDim2.new(0, 15, 0, 5)
+title.Size = UDim2.new(1, -30, 0, 25)
+title.Font = Enum.Font.GothamBold
+title.Text = "ULTIMATE FARM v7.0"
+title.TextColor3 = Color3.fromRGB(255, 215, 0)
+title.TextSize = 18
+title.TextXAlignment = Enum.TextXAlignment.Left
 
-    local titleText = Instance.new("TextLabel")
-    titleText.Parent = titleBar
-    titleText.BackgroundTransparency = 1
-    titleText.Position = UDim2.new(0, 10, 0, 0)
-    titleText.Size = UDim2.new(0, 200, 1, 0)
-    titleText.Font = Enum.Font.GothamBold
-    titleText.Text = "👑 ULTIMATE FARM " .. scriptConfig.version
-    titleText.TextColor3 = Color3.fromRGB(255, 215, 0)
-    titleText.TextSize = 14
-    titleText.TextXAlignment = Enum.TextXAlignment.Left
+-- Stats
+local statsFrame = Instance.new("Frame")
+statsFrame.Parent = topBar
+statsFrame.BackgroundTransparency = 1
+statsFrame.Position = UDim2.new(0, 15, 0, 35)
+statsFrame.Size = UDim2.new(1, -30, 0, 35)
 
-    -- Cerrar GUI
-    local closeBtn = Instance.new("TextButton")
-    closeBtn.Parent = titleBar
-    closeBtn.BackgroundColor3 = Color3.fromRGB(200, 40, 40)
-    closeBtn.BackgroundTransparency = 0.8
-    closeBtn.BorderSizePixel = 0
-    closeBtn.Position = UDim2.new(1, -35, 0, 5)
-    closeBtn.Size = UDim2.new(0, 25, 0, 25)
-    closeBtn.Font = Enum.Font.GothamBold
-    closeBtn.Text = "✕"
-    closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    closeBtn.TextSize = 14
+local function createStat(text, color, posX)
+    local label = Instance.new("TextLabel")
+    label.Parent = statsFrame
+    label.BackgroundTransparency = 1
+    label.Position = UDim2.new(posX, 0, 0, 0)
+    label.Size = UDim2.new(0, 100, 1, 0)
+    label.Font = Enum.Font.GothamBold
+    label.Text = text
+    label.TextColor3 = color
+    label.TextSize = 13
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    return label
+end
 
-    closeBtn.MouseButton1Click:Connect(function()
-        mainFrame.Visible = false
-        toggleBtn.Visible = true
-        state.guiVisible = false
-    end)
+local coronaStat = createStat("👑 " .. tostring(coronas.Value), Color3.fromRGB(255, 215, 0), 0)
+local speedStat = createStat("⚡ " .. (progresoSpeed and tostring(progresoSpeed.Value) or "N/A"), Color3.fromRGB(100, 200, 255), 0.20)
+local clonesStat = createStat("👥 " .. tostring(#clones), Color3.fromRGB(100, 255, 200), 0.40)
+local statusStat = createStat(elements.partCorona and "✅" or "❌", elements.partCorona and Color3.fromRGB(100, 255, 100) or Color3.fromRGB(255, 100, 100), 0.60)
 
-    toggleBtn.MouseButton1Click:Connect(function()
-        mainFrame.Visible = true
-        toggleBtn.Visible = false
-        state.guiVisible = true
-    end)
-
-    -- ============================================================
-    -- 7. STATS EN UNA SOLA LÍNEA (HORIZONTAL)
-    -- ============================================================
-    local statsFrame = Instance.new("Frame")
-    statsFrame.Parent = mainFrame
-    statsFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 35)
-    statsFrame.BackgroundTransparency = 0.3
-    statsFrame.BorderSizePixel = 1
-    statsFrame.BorderColor3 = Color3.fromRGB(40, 40, 70)
-    statsFrame.Position = UDim2.new(0, 10, 0, 40)
-    statsFrame.Size = UDim2.new(1, -20, 0, 28)
-
-    local statsCorner = Instance.new("UICorner")
-    statsCorner.Parent = statsFrame
-    statsCorner.CornerRadius = UDim.new(0, 4)
-
-    -- Coronas
-    local coronaStat = Instance.new("TextLabel")
-    coronaStat.Parent = statsFrame
-    coronaStat.BackgroundTransparency = 1
-    coronaStat.Position = UDim2.new(0, 10, 0, 0)
-    coronaStat.Size = UDim2.new(0, 120, 1, 0)
-    coronaStat.Font = Enum.Font.GothamBold
+local function updateStats()
     coronaStat.Text = "👑 " .. tostring(coronas.Value)
-    coronaStat.TextColor3 = Color3.fromRGB(255, 215, 0)
-    coronaStat.TextSize = 13
-    coronaStat.TextXAlignment = Enum.TextXAlignment.Left
+    if progresoSpeed then speedStat.Text = "⚡ " .. tostring(progresoSpeed.Value) end
+    clonesStat.Text = "👥 " .. tostring(#clones)
+end
 
-    coronas.Changed:Connect(function()
-        coronaStat.Text = "👑 " .. tostring(coronas.Value)
+coronas.Changed:Connect(updateStats)
+if progresoSpeed then progresoSpeed.Changed:Connect(updateStats) end
+
+-- Botón Cerrar
+local closeBtn = Instance.new("TextButton")
+closeBtn.Parent = topBar
+closeBtn.BackgroundColor3 = Color3.fromRGB(200, 40, 40)
+closeBtn.BackgroundTransparency = 0.8
+closeBtn.BorderSizePixel = 0
+closeBtn.Position = UDim2.new(1, -35, 0, 5)
+closeBtn.Size = UDim2.new(0, 25, 0, 25)
+closeBtn.Font = Enum.Font.GothamBold
+closeBtn.Text = "✕"
+closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeBtn.TextSize = 14
+closeBtn.MouseButton1Click:Connect(function()
+    screenGui:Destroy()
+end)
+
+local closeCorner = Instance.new("UICorner")
+closeCorner.Parent = closeBtn
+closeCorner.CornerRadius = UDim.new(1, 0)
+
+-- ============================================================
+-- CATEGORÍA: PRINCIPAL
+-- ============================================================
+local mainCategory = Instance.new("Frame")
+mainCategory.Parent = mainFrame
+mainCategory.BackgroundTransparency = 1
+mainCategory.Position = UDim2.new(0, 15, 0, 90)
+mainCategory.Size = UDim2.new(1, -30, 0, 45)
+
+local catTitle = Instance.new("TextLabel")
+catTitle.Parent = mainCategory
+catTitle.BackgroundTransparency = 1
+catTitle.Position = UDim2.new(0, 0, 0, 0)
+catTitle.Size = UDim2.new(0, 150, 0, 20)
+catTitle.Font = Enum.Font.GothamBold
+catTitle.Text = "PRINCIPAL"
+catTitle.TextColor3 = Color3.fromRGB(255, 215, 0)
+catTitle.TextSize = 14
+catTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+-- Botones principales (fila 1)
+local btnFrame1 = Instance.new("Frame")
+btnFrame1.Parent = mainCategory
+btnFrame1.BackgroundTransparency = 1
+btnFrame1.Position = UDim2.new(0, 0, 0, 22)
+btnFrame1.Size = UDim2.new(1, 0, 0, 22)
+
+local mainButtons1 = {
+    {text = "TELEPORT", color = Color3.fromRGB(0, 150, 255), toggle = "teleport", func = toggleTeleport},
+    {text = "INVISIBLE", color = Color3.fromRGB(180, 50, 220), toggle = "invisible", func = toggleInvisible},
+    {text = "TREADMILL", color = Color3.fromRGB(0, 200, 150), toggle = "treadmill", func = toggleTreadmill},
+    {text = "CLON FARM", color = Color3.fromRGB(0, 200, 100), toggle = "clon", func = toggleClon},
+    {text = "ANTI-AFK", color = Color3.fromRGB(100, 100, 200), toggle = "antiAFK", func = toggleAntiAFK}
+}
+
+local btnObjects = {}
+
+for i, btnData in ipairs(mainButtons1) do
+    local btn = Instance.new("TextButton")
+    btn.Parent = btnFrame1
+    btn.BackgroundColor3 = btnData.color
+    btn.BackgroundTransparency = 0.85
+    btn.BorderSizePixel = 0
+    btn.Position = UDim2.new((i-1) * 0.2, 2, 0, 0)
+    btn.Size = UDim2.new(0.19, -2, 1, 0)
+    btn.Font = Enum.Font.GothamBold
+    btn.Text = btnData.text .. " [OFF]"
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.TextSize = 11
+    btnObjects[btnData.toggle] = btn
+    
+    btn.MouseButton1Click:Connect(function()
+        btnData.func()
+        local st = state[btnData.toggle]
+        btn.Text = btnData.text .. (st and " [ON]" or " [OFF]")
+        btn.BackgroundColor3 = st and Color3.fromRGB(200, 50, 50) or btnData.color
+        updateStats()
     end)
+end
 
-    -- Separador 1
-    local sep1 = Instance.new("Frame")
-    sep1.Parent = statsFrame
-    sep1.BackgroundColor3 = Color3.fromRGB(60, 60, 100)
-    sep1.BorderSizePixel = 0
-    sep1.Position = UDim2.new(0, 135, 0, 4)
-    sep1.Size = UDim2.new(0, 1, 0, 20)
+-- ============================================================
+-- CATEGORÍA: UTILIDADES
+-- ============================================================
+local utilsCategory = Instance.new("Frame")
+utilsCategory.Parent = mainFrame
+utilsCategory.BackgroundTransparency = 1
+utilsCategory.Position = UDim2.new(0, 15, 0, 145)
+utilsCategory.Size = UDim2.new(1, -30, 0, 45)
 
-    -- Speed
-    local speedStat = Instance.new("TextLabel")
-    speedStat.Parent = statsFrame
-    speedStat.BackgroundTransparency = 1
-    speedStat.Position = UDim2.new(0, 145, 0, 0)
-    speedStat.Size = UDim2.new(0, 180, 1, 0)
-    speedStat.Font = Enum.Font.Gotham
-    speedStat.Text = progresoSpeed and ("⚡ " .. tostring(progresoSpeed.Value) .. "/" .. tostring(metaSpeed.Value)) or "⚡ N/A"
-    speedStat.TextColor3 = Color3.fromRGB(100, 200, 255)
-    speedStat.TextSize = 12
-    speedStat.TextXAlignment = Enum.TextXAlignment.Left
+local catTitle2 = Instance.new("TextLabel")
+catTitle2.Parent = utilsCategory
+catTitle2.BackgroundTransparency = 1
+catTitle2.Position = UDim2.new(0, 0, 0, 0)
+catTitle2.Size = UDim2.new(0, 150, 0, 20)
+catTitle2.Font = Enum.Font.GothamBold
+catTitle2.Text = "UTILIDADES"
+catTitle2.TextColor3 = Color3.fromRGB(100, 200, 255)
+catTitle2.TextSize = 14
+catTitle2.TextXAlignment = Enum.TextXAlignment.Left
 
-    if progresoSpeed then
-        progresoSpeed.Changed:Connect(function()
-            speedStat.Text = "⚡ " .. tostring(progresoSpeed.Value) .. "/" .. tostring(metaSpeed.Value)
-        end)
-        metaSpeed.Changed:Connect(function()
-            speedStat.Text = "⚡ " .. tostring(progresoSpeed.Value) .. "/" .. tostring(metaSpeed.Value)
-        end)
-    end
+local btnFrame2 = Instance.new("Frame")
+btnFrame2.Parent = utilsCategory
+btnFrame2.BackgroundTransparency = 1
+btnFrame2.Position = UDim2.new(0, 0, 0, 22)
+btnFrame2.Size = UDim2.new(1, 0, 0, 22)
 
-    -- Separador 2
-    local sep2 = Instance.new("Frame")
-    sep2.Parent = statsFrame
-    sep2.BackgroundColor3 = Color3.fromRGB(60, 60, 100)
-    sep2.BorderSizePixel = 0
-    sep2.Position = UDim2.new(0, 330, 0, 4)
-    sep2.Size = UDim2.new(0, 1, 0, 20)
+local utilsButtons = {
+    {text = "AUTO-SPEED", color = Color3.fromRGB(255, 150, 0), toggle = "autoSpeed", func = toggleAutoSpeed},
+    {text = "AUTO-CROWNS", color = Color3.fromRGB(255, 215, 0), toggle = "autoCrowns", func = toggleAutoCrowns},
+    {text = "AURA", color = Color3.fromRGB(200, 100, 255), toggle = "auraActive", func = toggleAura},
+    {text = "AUTO-WALK", color = Color3.fromRGB(0, 255, 200), toggle = "autoWalk", func = toggleAutoWalk},
+    {text = "AUTO-REBIRTH", color = Color3.fromRGB(255, 100, 200), toggle = "autoRebirth", func = toggleAutoRebirth}
+}
 
-    -- Estado Zona
-    local statusStat = Instance.new("TextLabel")
-    statusStat.Parent = statsFrame
-    statusStat.BackgroundTransparency = 1
-    statusStat.Position = UDim2.new(0, 340, 0, 0)
-    statusStat.Size = UDim2.new(0, 120, 1, 0)
-    statusStat.Font = Enum.Font.Gotham
-    statusStat.Text = partCorona and "✅ Zona-12: OK" or "❌ Zona-12: NO"
-    statusStat.TextColor3 = partCorona and Color3.fromRGB(100, 255, 100) or Color3.fromRGB(255, 100, 100)
-    statusStat.TextSize = 12
-    statusStat.TextXAlignment = Enum.TextXAlignment.Left
+for i, btnData in ipairs(utilsButtons) do
+    local btn = Instance.new("TextButton")
+    btn.Parent = btnFrame2
+    btn.BackgroundColor3 = btnData.color
+    btn.BackgroundTransparency = 0.85
+    btn.BorderSizePixel = 0
+    btn.Position = UDim2.new((i-1) * 0.2, 2, 0, 0)
+    btn.Size = UDim2.new(0.19, -2, 1, 0)
+    btn.Font = Enum.Font.GothamBold
+    btn.Text = btnData.text .. " [OFF]"
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.TextSize = 11
+    btnObjects[btnData.toggle] = btn
+    
+    btn.MouseButton1Click:Connect(function()
+        btnData.func()
+        local st = state[btnData.toggle]
+        if btnData.toggle == "autoRebirth" then
+            st = autoRebirthActive
+        end
+        btn.Text = btnData.text .. (st and " [ON]" or " [OFF]")
+        btn.BackgroundColor3 = st and Color3.fromRGB(200, 50, 50) or btnData.color
+        updateStats()
+    end)
+end
 
-    -- Separador 3
-    local sep3 = Instance.new("Frame")
-    sep3.Parent = statsFrame
-    sep3.BackgroundColor3 = Color3.fromRGB(60, 60, 100)
-    sep3.BorderSizePixel = 0
-    sep3.Position = UDim2.new(0, 465, 0, 4)
-    sep3.Size = UDim2.new(0, 1, 0, 20)
+-- ============================================================
+-- CATEGORÍA: EXTRAS
+-- ============================================================
+local extraCategory = Instance.new("Frame")
+extraCategory.Parent = mainFrame
+extraCategory.BackgroundTransparency = 1
+extraCategory.Position = UDim2.new(0, 15, 0, 200)
+extraCategory.Size = UDim2.new(1, -30, 0, 45)
 
-    -- Clones
-    local clonesStat = Instance.new("TextLabel")
-    clonesStat.Parent = statsFrame
-    clonesStat.BackgroundTransparency = 1
-    clonesStat.Position = UDim2.new(0, 475, 0, 0)
-    clonesStat.Size = UDim2.new(0, 100, 1, 0)
-    clonesStat.Font = Enum.Font.Gotham
-    clonesStat.Text = "👥 Clones: 0"
-    clonesStat.TextColor3 = Color3.fromRGB(100, 255, 200)
-    clonesStat.TextSize = 12
-    clonesStat.TextXAlignment = Enum.TextXAlignment.Left
+local catTitle3 = Instance.new("TextLabel")
+catTitle3.Parent = extraCategory
+catTitle3.BackgroundTransparency = 1
+catTitle3.Position = UDim2.new(0, 0, 0, 0)
+catTitle3.Size = UDim2.new(0, 150, 0, 20)
+catTitle3.Font = Enum.Font.GothamBold
+catTitle3.Text = "EXTRAS"
+catTitle3.TextColor3 = Color3.fromRGB(255, 150, 100)
+catTitle3.TextSize = 14
+catTitle3.TextXAlignment = Enum.TextXAlignment.Left
 
-    local function updateClonesLabel()
-        clonesStat.Text = "👥 Clones: " .. tostring(#clones)
-    end
+local btnFrame3 = Instance.new("Frame")
+btnFrame3.Parent = extraCategory
+btnFrame3.BackgroundTransparency = 1
+btnFrame3.Position = UDim2.new(0, 0, 0, 22)
+btnFrame3.Size = UDim2.new(1, 0, 0, 22)
 
-    -- ============================================================
-    -- 8. MENÚ PRINCIPAL (BOTONES EN FILA)
-    -- ============================================================
-    local menuLabel = Instance.new("TextLabel")
-    menuLabel.Parent = mainFrame
-    menuLabel.BackgroundTransparency = 1
-    menuLabel.Position = UDim2.new(0, 10, 0, 72)
-    menuLabel.Size = UDim2.new(0, 120, 0, 18)
-    menuLabel.Font = Enum.Font.GothamBold
-    menuLabel.Text = "📌 MENÚ PRINCIPAL"
-    menuLabel.TextColor3 = Color3.fromRGB(255, 215, 0)
-    menuLabel.TextSize = 12
-    menuLabel.TextXAlignment = Enum.TextXAlignment.Left
+local extraButtons = {
+    {text = "FARM ALL", color = Color3.fromRGB(255, 50, 50), toggle = "farmAll", func = toggleFarmAll}
+}
 
-    -- Contenedor de botones principales (fila horizontal)
-    local mainButtonsFrame = Instance.new("Frame")
-    mainButtonsFrame.Parent = mainFrame
-    mainButtonsFrame.BackgroundTransparency = 1
-    mainButtonsFrame.Position = UDim2.new(0, 10, 0, 92)
-    mainButtonsFrame.Size = UDim2.new(1, -20, 0, 32)
+for i, btnData in ipairs(extraButtons) do
+    local btn = Instance.new("TextButton")
+    btn.Parent = btnFrame3
+    btn.BackgroundColor3 = btnData.color
+    btn.BackgroundTransparency = 0.85
+    btn.BorderSizePixel = 0
+    btn.Position = UDim2.new((i-1) * 0.2, 2, 0, 0)
+    btn.Size = UDim2.new(0.19, -2, 1, 0)
+    btn.Font = Enum.Font.GothamBold
+    btn.Text = btnData.text .. " [OFF]"
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.TextSize = 11
+    btnObjects[btnData.toggle] = btn
+    
+    btn.MouseButton1Click:Connect(function()
+        btnData.func()
+        local st = state[btnData.toggle]
+        btn.Text = btnData.text .. (st and " [ON]" or " [OFF]")
+        btn.BackgroundColor3 = st and Color3.fromRGB(200, 50, 50) or btnData.color
+        updateStats()
+    end)
+end
 
-    local mainButtons = {
-        {text = "🛰️ TELEPORT", key = "T", color = Color3.fromRGB(0, 150, 255), toggle = "teleport"},
-        {text = "👻 INVISIBLE", key = "I", color = Color3.fromRGB(180, 50, 220), toggle = "invisible"},
-        {text = "🏃 TREADMILL", key = "R", color = Color3.fromRGB(0, 200, 150), toggle = "treadmill"},
-        {text = "👥 CLON FARM", key = "C", color = Color3.fromRGB(0, 200, 100), toggle = "clon"},
-        {text = "🛡️ ANTI-AFK", key = "A", color = Color3.fromRGB(100, 100, 200), toggle = "antiAFK"}
+-- ============================================================
+-- CATEGORÍA: ADMIN (SOLO Rivalsteam73)
+-- ============================================================
+if isOwner then
+    local adminCategory = Instance.new("Frame")
+    adminCategory.Parent = mainFrame
+    adminCategory.BackgroundTransparency = 1
+    adminCategory.Position = UDim2.new(0, 15, 0, 255)
+    adminCategory.Size = UDim2.new(1, -30, 0, 45)
+    
+    local catTitle4 = Instance.new("TextLabel")
+    catTitle4.Parent = adminCategory
+    catTitle4.BackgroundTransparency = 1
+    catTitle4.Position = UDim2.new(0, 0, 0, 0)
+    catTitle4.Size = UDim2.new(0, 150, 0, 20)
+    catTitle4.Font = Enum.Font.GothamBold
+    catTitle4.Text = "👑 ADMIN (Rivalsteam73)"
+    catTitle4.TextColor3 = Color3.fromRGB(255, 215, 0)
+    catTitle4.TextSize = 14
+    catTitle4.TextXAlignment = Enum.TextXAlignment.Left
+    
+    local btnFrame4 = Instance.new("Frame")
+    btnFrame4.Parent = adminCategory
+    btnFrame4.BackgroundTransparency = 1
+    btnFrame4.Position = UDim2.new(0, 0, 0, 22)
+    btnFrame4.Size = UDim2.new(1, 0, 0, 22)
+    
+    local adminButtons = {
+        {text = "SUGERENCIAS", color = Color3.fromRGB(255, 215, 0), toggle = "sugerencias", func = function() print("Sugerencias") end}
     }
-
-    local btnObjects = {}
-
-    for i, btnData in ipairs(mainButtons) do
+    
+    for i, btnData in ipairs(adminButtons) do
         local btn = Instance.new("TextButton")
-        btn.Parent = mainButtonsFrame
+        btn.Parent = btnFrame4
         btn.BackgroundColor3 = btnData.color
         btn.BackgroundTransparency = 0.85
         btn.BorderSizePixel = 0
-        btn.Position = UDim2.new((i-1) * 0.2, 0, 0, 0)
-        btn.Size = UDim2.new(0.19, 0, 1, 0)
+        btn.Position = UDim2.new((i-1) * 0.2, 2, 0, 0)
+        btn.Size = UDim2.new(0.19, -2, 1, 0)
         btn.Font = Enum.Font.GothamBold
         btn.Text = btnData.text .. " [OFF]"
         btn.TextColor3 = Color3.fromRGB(255, 255, 255)
         btn.TextSize = 11
         btnObjects[btnData.toggle] = btn
-
+        
         btn.MouseButton1Click:Connect(function()
-            local funcs = {
-                teleport = toggleTeleport,
-                invisible = toggleInvisible,
-                treadmill = toggleTreadmill,
-                clon = toggleClon,
-                antiAFK = toggleAntiAFK
-            }
-            funcs[btnData.toggle]()
-
+            btnData.func()
             local st = state[btnData.toggle]
             btn.Text = btnData.text .. (st and " [ON]" or " [OFF]")
             btn.BackgroundColor3 = st and Color3.fromRGB(200, 50, 50) or btnData.color
-            btn.BackgroundTransparency = 0.85
-
-            updateClonesLabel()
         end)
     end
-
-    -- ============================================================
-    -- 9. MENÚ UTILIDADES (CON VERIFICACIÓN DE USUARIO)
-    -- ============================================================
-    local utilsLabel = Instance.new("TextLabel")
-    utilsLabel.Parent = mainFrame
-    utilsLabel.BackgroundTransparency = 1
-    utilsLabel.Position = UDim2.new(0, 10, 0, 130)
-    utilsLabel.Size = UDim2.new(0, 120, 0, 18)
-    utilsLabel.Font = Enum.Font.GothamBold
-    utilsLabel.Text = "🔧 MENÚ UTILIDADES"
-    utilsLabel.TextColor3 = Color3.fromRGB(100, 200, 255)
-    utilsLabel.TextSize = 12
-    utilsLabel.TextXAlignment = Enum.TextXAlignment.Left
-
-    -- Contenedor de botones de utilidades
-    local utilsButtonsFrame = Instance.new("Frame")
-    utilsButtonsFrame.Parent = mainFrame
-    utilsButtonsFrame.BackgroundTransparency = 1
-    utilsButtonsFrame.Position = UDim2.new(0, 10, 0, 150)
-    utilsButtonsFrame.Size = UDim2.new(1, -20, 0, 32)
-
-    -- Botón Sugerencia (todos)
-    local suggestBtn = Instance.new("TextButton")
-    suggestBtn.Parent = utilsButtonsFrame
-    suggestBtn.BackgroundColor3 = Color3.fromRGB(100, 100, 200)
-    suggestBtn.BackgroundTransparency = 0.85
-    suggestBtn.BorderSizePixel = 0
-    suggestBtn.Position = UDim2.new(0, 0, 0, 0)
-    suggestBtn.Size = UDim2.new(0.24, 0, 1, 0)
-    suggestBtn.Font = Enum.Font.GothamBold
-    suggestBtn.Text = "💡 ENVIAR SUGERENCIA"
-    suggestBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    suggestBtn.TextSize = 11
-
-    -- Frame para sugerencia (todos)
-    local suggestFrame = Instance.new("Frame")
-    suggestFrame.Parent = mainFrame
-    suggestFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 25)
-    suggestFrame.BackgroundTransparency = 0.1
-    suggestFrame.BorderSizePixel = 0
-    suggestFrame.Position = UDim2.new(0, 10, 0, 185)
-    suggestFrame.Size = UDim2.new(1, -20, 0, 55)
-    suggestFrame.Visible = false
-    suggestFrame.ClipsDescendants = true
-
-    local suggestBox = Instance.new("TextBox")
-    suggestBox.Parent = suggestFrame
-    suggestBox.BackgroundColor3 = Color3.fromRGB(20, 20, 40)
-    suggestBox.BorderSizePixel = 0
-    suggestBox.Position = UDim2.new(0, 5, 0, 5)
-    suggestBox.Size = UDim2.new(1, -80, 0, 22)
-    suggestBox.Font = Enum.Font.Gotham
-    suggestBox.PlaceholderText = "Escribe tu sugerencia aquí..."
-    suggestBox.Text = ""
-    suggestBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-    suggestBox.TextSize = 11
-    suggestBox.TextXAlignment = Enum.TextXAlignment.Left
-
-    local sendBtn = Instance.new("TextButton")
-    sendBtn.Parent = suggestFrame
-    sendBtn.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
-    sendBtn.BackgroundTransparency = 0.85
-    sendBtn.BorderSizePixel = 0
-    sendBtn.Position = UDim2.new(1, -70, 0, 5)
-    sendBtn.Size = UDim2.new(0, 65, 0, 22)
-    sendBtn.Font = Enum.Font.GothamBold
-    sendBtn.Text = "📤 ENVIAR"
-    sendBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    sendBtn.TextSize = 11
-
-    suggestBtn.MouseButton1Click:Connect(function()
-        suggestFrame.Visible = not suggestFrame.Visible
-        if suggestFrame.Visible then
-            suggestBtn.Text = "💡 CERRAR SUGERENCIA"
-        else
-            suggestBtn.Text = "💡 ENVIAR SUGERENCIA"
-        end
-    end)
-
-    sendBtn.MouseButton1Click:Connect(function()
-        local text = suggestBox.Text
-        if text == "" or text == "Escribe tu sugerencia aquí..." then
-            print("❌ Escribe una sugerencia primero")
-            return
-        end
-
-        suggestionCount = suggestionCount + 1
-        table.insert(suggestions, {
-            id = suggestionCount,
-            player = LocalPlayer.Name,
-            text = text,
-            time = os.date("%H:%M:%S - %d/%m/%Y")
-        })
-
-        suggestBox.Text = ""
-        suggestFrame.Visible = false
-        suggestBtn.Text = "💡 ENVIAR SUGERENCIA"
-        print("✅ Sugerencia enviada! ID: " .. suggestionCount)
-        if isOwner then
-            viewBtn.Text = "👑 VER SUGERENCIAS (" .. #suggestions .. ")"
-        end
-    end)
-
-    -- ============================================================
-    -- ⚠️ SOLO PARA Rivalsteam73 (Verificación de usuario)
-    -- ============================================================
-    if isOwner then
-        -- Botón Ver Sugerencias (SOLO Rivalsteam73)
-        local viewBtn = Instance.new("TextButton")
-        viewBtn.Parent = utilsButtonsFrame
-        viewBtn.BackgroundColor3 = Color3.fromRGB(255, 215, 0)
-        viewBtn.BackgroundTransparency = 0.85
-        viewBtn.BorderSizePixel = 0
-        viewBtn.Position = UDim2.new(0.25, 0, 0, 0)
-        viewBtn.Size = UDim2.new(0.24, 0, 1, 0)
-        viewBtn.Font = Enum.Font.GothamBold
-        viewBtn.Text = "👑 VER SUGERENCIAS (0)"
-        viewBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-        viewBtn.TextSize = 11
-
-        -- Botón Ver Changelogs (SOLO Rivalsteam73)
-        local changelogBtn = Instance.new("TextButton")
-        changelogBtn.Parent = utilsButtonsFrame
-        changelogBtn.BackgroundColor3 = Color3.fromRGB(200, 150, 0)
-        changelogBtn.BackgroundTransparency = 0.85
-        changelogBtn.BorderSizePixel = 0
-        changelogBtn.Position = UDim2.new(0.50, 0, 0, 0)
-        changelogBtn.Size = UDim2.new(0.24, 0, 1, 0)
-        changelogBtn.Font = Enum.Font.GothamBold
-        changelogBtn.Text = "📜 VER CHANGELOGS"
-        changelogBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-        changelogBtn.TextSize = 11
-
-        -- Botón Configuración (SOLO Rivalsteam73)
-        local configBtn = Instance.new("TextButton")
-        configBtn.Parent = utilsButtonsFrame
-        configBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 200)
-        configBtn.BackgroundTransparency = 0.85
-        configBtn.BorderSizePixel = 0
-        configBtn.Position = UDim2.new(0.75, 0, 0, 0)
-        configBtn.Size = UDim2.new(0.24, 0, 1, 0)
-        configBtn.Font = Enum.Font.GothamBold
-        configBtn.Text = "⚙️ CONFIGURACIÓN"
-        configBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-        configBtn.TextSize = 11
-
-        -- Frame para sugerencias (SOLO Rivalsteam73)
-        local viewFrame = Instance.new("Frame")
-        viewFrame.Parent = mainFrame
-        viewFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 25)
-        viewFrame.BackgroundTransparency = 0.1
-        viewFrame.BorderSizePixel = 0
-        viewFrame.Position = UDim2.new(0, 10, 0, 185)
-        viewFrame.Size = UDim2.new(1, -20, 0, 55)
-        viewFrame.Visible = false
-        viewFrame.ClipsDescendants = true
-
-        local viewTitle = Instance.new("TextLabel")
-        viewTitle.Parent = viewFrame
-        viewTitle.BackgroundTransparency = 1
-        viewTitle.Position = UDim2.new(0, 10, 0, 2)
-        viewTitle.Size = UDim2.new(1, -20, 0, 16)
-        viewTitle.Font = Enum.Font.GothamBold
-        viewTitle.Text = "📋 SUGERENCIAS"
-        viewTitle.TextColor3 = Color3.fromRGB(255, 215, 0)
-        viewTitle.TextSize = 11
-        viewTitle.TextXAlignment = Enum.TextXAlignment.Left
-
-        local suggestionsList = Instance.new("ScrollingFrame")
-        suggestionsList.Parent = viewFrame
-        suggestionsList.BackgroundColor3 = Color3.fromRGB(15, 15, 35)
-        suggestionsList.BackgroundTransparency = 0.5
-        suggestionsList.BorderSizePixel = 0
-        suggestionsList.Position = UDim2.new(0, 5, 0, 20)
-        suggestionsList.Size = UDim2.new(1, -10, 1, -25)
-        suggestionsList.CanvasSize = UDim2.new(0, 0, 0, 0)
-        suggestionsList.ScrollBarThickness = 3
-        suggestionsList.ScrollBarImageColor3 = Color3.fromRGB(255, 215, 0)
-
-        -- Frame para changelogs (SOLO Rivalsteam73)
-        local changelogFrame = Instance.new("Frame")
-        changelogFrame.Parent = mainFrame
-        changelogFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 25)
-        changelogFrame.BackgroundTransparency = 0.1
-        changelogFrame.BorderSizePixel = 0
-        changelogFrame.Position = UDim2.new(0, 10, 0, 185)
-        changelogFrame.Size = UDim2.new(1, -20, 0, 55)
-        changelogFrame.Visible = false
-        changelogFrame.ClipsDescendants = true
-
-        local changelogTitle = Instance.new("TextLabel")
-        changelogTitle.Parent = changelogFrame
-        changelogTitle.BackgroundTransparency = 1
-        changelogTitle.Position = UDim2.new(0, 10, 0, 2)
-        changelogTitle.Size = UDim2.new(1, -20, 0, 16)
-        changelogTitle.Font = Enum.Font.GothamBold
-        changelogTitle.Text = "📜 CHANGELOGS"
-        changelogTitle.TextColor3 = Color3.fromRGB(255, 215, 0)
-        changelogTitle.TextSize = 11
-        changelogTitle.TextXAlignment = Enum.TextXAlignment.Left
-
-        local changelogList = Instance.new("ScrollingFrame")
-        changelogList.Parent = changelogFrame
-        changelogList.BackgroundColor3 = Color3.fromRGB(15, 15, 35)
-        changelogList.BackgroundTransparency = 0.5
-        changelogList.BorderSizePixel = 0
-        changelogList.Position = UDim2.new(0, 5, 0, 20)
-        changelogList.Size = UDim2.new(1, -10, 1, -25)
-        changelogList.CanvasSize = UDim2.new(0, 0, 0, 0)
-        changelogList.ScrollBarThickness = 3
-        changelogList.ScrollBarImageColor3 = Color3.fromRGB(255, 215, 0)
-
-        -- Frame de configuración (SOLO Rivalsteam73)
-        local configFrame = Instance.new("Frame")
-        configFrame.Parent = mainFrame
-        configFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 25)
-        configFrame.BackgroundTransparency = 0.1
-        configFrame.BorderSizePixel = 0
-        configFrame.Position = UDim2.new(0, 10, 0, 185)
-        configFrame.Size = UDim2.new(1, -20, 0, 55)
-        configFrame.Visible = false
-        configFrame.ClipsDescendants = true
-
-        local configTitle = Instance.new("TextLabel")
-        configTitle.Parent = configFrame
-        configTitle.BackgroundTransparency = 1
-        configTitle.Position = UDim2.new(0, 10, 0, 2)
-        configTitle.Size = UDim2.new(1, -20, 0, 16)
-        configTitle.Font = Enum.Font.GothamBold
-        configTitle.Text = "⚙️ CONFIGURACIÓN"
-        configTitle.TextColor3 = Color3.fromRGB(255, 215, 0)
-        configTitle.TextSize = 11
-        configTitle.TextXAlignment = Enum.TextXAlignment.Left
-
-        local versionBox = Instance.new("TextBox")
-        versionBox.Parent = configFrame
-        versionBox.BackgroundColor3 = Color3.fromRGB(20, 20, 40)
-        versionBox.BorderSizePixel = 0
-        versionBox.Position = UDim2.new(0, 10, 0, 20)
-        versionBox.Size = UDim2.new(0, 100, 0, 22)
-        versionBox.Font = Enum.Font.Gotham
-        versionBox.PlaceholderText = "Versión"
-        versionBox.Text = scriptConfig.version
-        versionBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-        versionBox.TextSize = 11
-
-        local dateBox = Instance.new("TextBox")
-        dateBox.Parent = configFrame
-        dateBox.BackgroundColor3 = Color3.fromRGB(20, 20, 40)
-        dateBox.BorderSizePixel = 0
-        dateBox.Position = UDim2.new(0, 120, 0, 20)
-        dateBox.Size = UDim2.new(0, 100, 0, 22)
-        dateBox.Font = Enum.Font.Gotham
-        dateBox.PlaceholderText = "Fecha"
-        dateBox.Text = scriptConfig.versionDate
-        dateBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-        dateBox.TextSize = 11
-
-        local saveConfigBtn = Instance.new("TextButton")
-        saveConfigBtn.Parent = configFrame
-        saveConfigBtn.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
-        saveConfigBtn.BackgroundTransparency = 0.85
-        saveConfigBtn.BorderSizePixel = 0
-        saveConfigBtn.Position = UDim2.new(0, 230, 0, 20)
-        saveConfigBtn.Size = UDim2.new(0, 80, 0, 22)
-        saveConfigBtn.Font = Enum.Font.GothamBold
-        saveConfigBtn.Text = "💾 GUARDAR"
-        saveConfigBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-        saveConfigBtn.TextSize = 11
-
-        saveConfigBtn.MouseButton1Click:Connect(function()
-            scriptConfig.version = versionBox.Text
-            scriptConfig.versionDate = dateBox.Text
-            titleText.Text = "👑 ULTIMATE FARM " .. scriptConfig.version
-            print("✅ Configuración guardada: " .. scriptConfig.version .. " - " .. scriptConfig.versionDate)
-            configFrame.Visible = false
-            configBtn.Text = "⚙️ CONFIGURACIÓN"
-        end)
-
-        -- Funciones para actualizar listas
-        local function updateSuggestionsList()
-            for _, child in ipairs(suggestionsList:GetChildren()) do
-                child:Destroy()
-            end
-
-            if #suggestions == 0 then
-                local empty = Instance.new("TextLabel")
-                empty.Parent = suggestionsList
-                empty.BackgroundTransparency = 1
-                empty.Size = UDim2.new(1, 0, 0, 30)
-                empty.Font = Enum.Font.Gotham
-                empty.Text = "📭 No hay sugerencias"
-                empty.TextColor3 = Color3.fromRGB(150, 150, 200)
-                empty.TextSize = 11
-                suggestionsList.CanvasSize = UDim2.new(0, 0, 0, 30)
-                return
-            end
-
-            local yPos = 0
-            for _, sug in ipairs(suggestions) do
-                local frame = Instance.new("Frame")
-                frame.Parent = suggestionsList
-                frame.BackgroundColor3 = Color3.fromRGB(20, 20, 40)
-                frame.BackgroundTransparency = 0.3
-                frame.BorderSizePixel = 1
-                frame.BorderColor3 = Color3.fromRGB(50, 50, 80)
-                frame.Position = UDim2.new(0, 5, 0, yPos)
-                frame.Size = UDim2.new(1, -10, 0, 35)
-
-                local info = Instance.new("TextLabel")
-                info.Parent = frame
-                info.BackgroundTransparency = 1
-                info.Position = UDim2.new(0, 8, 0, 2)
-                info.Size = UDim2.new(1, -16, 0, 14)
-                info.Font = Enum.Font.GothamBold
-                info.Text = "👤 " .. sug.player .. "  |  🕐 " .. sug.time
-                info.TextColor3 = Color3.fromRGB(200, 200, 255)
-                info.TextSize = 10
-                info.TextXAlignment = Enum.TextXAlignment.Left
-
-                local text = Instance.new("TextLabel")
-                text.Parent = frame
-                text.BackgroundTransparency = 1
-                text.Position = UDim2.new(0, 8, 0, 18)
-                text.Size = UDim2.new(1, -16, 0, 16)
-                text.Font = Enum.Font.Gotham
-                text.Text = "💬 " .. sug.text
-                text.TextColor3 = Color3.fromRGB(255, 255, 255)
-                text.TextSize = 10
-                text.TextXAlignment = Enum.TextXAlignment.Left
-                text.TextWrapped = true
-
-                yPos = yPos + 40
-            end
-            suggestionsList.CanvasSize = UDim2.new(0, 0, 0, yPos + 10)
-        end
-
-        local function updateChangelogList()
-            for _, child in ipairs(changelogList:GetChildren()) do
-                child:Destroy()
-            end
-
-            local yPos = 0
-            for _, log in ipairs(scriptConfig.changelogs) do
-                local frame = Instance.new("Frame")
-                frame.Parent = changelogList
-                frame.BackgroundColor3 = Color3.fromRGB(20, 20, 40)
-                frame.BackgroundTransparency = 0.3
-                frame.BorderSizePixel = 1
-                frame.BorderColor3 = Color3.fromRGB(50, 50, 80)
-                frame.Position = UDim2.new(0, 5, 0, yPos)
-                frame.Size = UDim2.new(1, -10, 0, 20 + #log.changes * 14)
-
-                local header = Instance.new("TextLabel")
-                header.Parent = frame
-                header.BackgroundTransparency = 1
-                header.Position = UDim2.new(0, 8, 0, 2)
-                header.Size = UDim2.new(1, -16, 0, 16)
-                header.Font = Enum.Font.GothamBold
-                header.Text = "📌 " .. log.version .. "  |  📅 " .. log.date
-                header.TextColor3 = Color3.fromRGB(255, 215, 0)
-                header.TextSize = 10
-                header.TextXAlignment = Enum.TextXAlignment.Left
-
-                local y = 18
-                for _, change in ipairs(log.changes) do
-                    local changeLabel = Instance.new("TextLabel")
-                    changeLabel.Parent = frame
-                    changeLabel.BackgroundTransparency = 1
-                    changeLabel.Position = UDim2.new(0, 16, 0, y)
-                    changeLabel.Size = UDim2.new(1, -24, 0, 13)
-                    changeLabel.Font = Enum.Font.Gotham
-                    changeLabel.Text = change
-                    changeLabel.TextColor3 = Color3.fromRGB(200, 255, 200)
-                    changeLabel.TextSize = 10
-                    changeLabel.TextXAlignment = Enum.TextXAlignment.Left
-                    y = y + 14
-                end
-
-                yPos = yPos + 20 + #log.changes * 14 + 8
-            end
-            changelogList.CanvasSize = UDim2.new(0, 0, 0, yPos + 10)
-        end
-
-        -- Conectar eventos de utilidades (SOLO Rivalsteam73)
-        viewBtn.MouseButton1Click:Connect(function()
-            viewFrame.Visible = not viewFrame.Visible
-            changelogFrame.Visible = false
-            configFrame.Visible = false
-            suggestFrame.Visible = false
-            if viewFrame.Visible then
-                viewBtn.Text = "👑 OCULTAR SUGERENCIAS"
-                updateSuggestionsList()
-            else
-                viewBtn.Text = "👑 VER SUGERENCIAS (" .. #suggestions .. ")"
-            end
-        end)
-
-        changelogBtn.MouseButton1Click:Connect(function()
-            changelogFrame.Visible = not changelogFrame.Visible
-            viewFrame.Visible = false
-            configFrame.Visible = false
-            suggestFrame.Visible = false
-            if changelogFrame.Visible then
-                changelogBtn.Text = "📜 OCULTAR CHANGELOGS"
-                updateChangelogList()
-            else
-                changelogBtn.Text = "📜 VER CHANGELOGS"
-            end
-        end)
-
-        configBtn.MouseButton1Click:Connect(function()
-            configFrame.Visible = not configFrame.Visible
-            viewFrame.Visible = false
-            changelogFrame.Visible = false
-            suggestFrame.Visible = false
-            if configFrame.Visible then
-                configBtn.Text = "⚙️ OCULTAR CONFIGURACIÓN"
-                versionBox.Text = scriptConfig.version
-                dateBox.Text = scriptConfig.versionDate
-            else
-                configBtn.Text = "⚙️ CONFIGURACIÓN"
-            end
-        end)
-
-        -- Actualizar contador
-        local function updateSuggestionCount()
-            viewBtn.Text = "👑 VER SUGERENCIAS (" .. #suggestions .. ")"
-        end
-
-        sendBtn.MouseButton1Click:Connect(function()
-            task.wait(0.1)
-            updateSuggestionCount()
-        end)
-    end
-
-    -- ============================================================
-    -- 10. ATAJOS DE TECLADO
-    -- ============================================================
-    UserInputService.InputBegan:Connect(function(input)
-        if input.KeyCode == Enum.KeyCode.B then
-            if state.guiVisible then
-                mainFrame.Visible = false
-                toggleBtn.Visible = true
-                state.guiVisible = false
-            else
-                mainFrame.Visible = true
-                toggleBtn.Visible = false
-                state.guiVisible = true
-            end
-        end
-
-        local map = {
-            [Enum.KeyCode.T] = "teleport",
-            [Enum.KeyCode.I] = "invisible",
-            [Enum.KeyCode.R] = "treadmill",
-            [Enum.KeyCode.C] = "clon",
-            [Enum.KeyCode.A] = "antiAFK"
-        }
-        local toggle = map[input.KeyCode]
-        if toggle and btnObjects[toggle] then
-            btnObjects[toggle].MouseButton1Click:Fire()
-        end
-    end)
-
-    -- ============================================================
-    -- 11. ACTUALIZAR AL RESPAWN
-    -- ============================================================
-    LocalPlayer.CharacterAdded:Connect(function()
-        if state.invisible then
-            task.wait(0.5)
-            local char = LocalPlayer.Character
-            if char then
-                for _, part in ipairs(char:GetDescendants()) do
-                    if part:IsA("BasePart") then
-                        savedProps[part] = {
-                            Transparency = part.Transparency,
-                            CanCollide = part.CanCollide,
-                            CanTouch = part.CanTouch,
-                            CanQuery = part.CanQuery
-                        }
-                        part.Transparency = 1
-                        part.CanCollide = false
-                        part.CanTouch = false
-                        part.CanQuery = false
-                    end
-                end
-            end
-        end
-    end)
-
-    -- ============================================================
-    -- 12. INICIALIZACIÓN
-    -- ============================================================
-    print("╔════════════════════════════════════════════════════╗")
-    print("║     👑 ULTIMATE FARM " .. scriptConfig.version .. " CARGADO 👑           ║")
-    print("╠════════════════════════════════════════════════════╣")
-    print("║  📌 GUI HORIZONTAL PROFESIONAL                    ║")
-    print("║  📡 T = Teleport                                 ║")
-    print("║  👻 I = Invisible Total                          ║")
-    print("║  🏃 R = Auto-Treadmill                          ║")
-    print("║  👥 C = Clon Farm x2                            ║")
-    print("║  🛡️ A = Anti-AFK                                ║")
-    print("║  🅱️ B = Abrir/Cerrar GUI                        ║")
-    if isOwner then
-        print("║  👑 Rivalsteam73: Panel Admin visible         ║")
-    else
-        print("║  👤 Usuario normal: Panel Admin oculto        ║")
-    end
-    print("║                                                 ║")
-    print("║  👑 Coronas: " .. tostring(coronas.Value))
-    if progresoSpeed then
-        print("║  ⚡ Speed: " .. tostring(progresoSpeed.Value) .. "/" .. tostring(metaSpeed.Value))
-    end
-    print("║  📍 Zona-12: " .. (partCorona and "✅ OK" or "❌ NO"))
-    print("╚════════════════════════════════════════════════════╝")
 end
 
 -- ============================================================
--- 13. INICIAR CARGA
+-- BOTÓN FLOTANTE PARA ABRIR/CERRAR
 -- ============================================================
-task.spawn(function()
-    local progress = 0
+local toggleBtn = Instance.new("TextButton")
+toggleBtn.Parent = screenGui
+toggleBtn.BackgroundColor3 = Color3.fromRGB(255, 215, 0)
+toggleBtn.BackgroundTransparency = 0.1
+toggleBtn.BorderSizePixel = 0
+toggleBtn.Position = UDim2.new(0.02, 0, 0.02, 0)
+toggleBtn.Size = UDim2.new(0, 50, 0, 50)
+toggleBtn.Font = Enum.Font.GothamBold
+toggleBtn.Text = "👑"
+toggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleBtn.TextSize = 24
 
-    local loadSteps = {
-        {text = "Inicializando módulos...", progress = 10},
-        {text = "Conectando al servidor...", progress = 25},
-        {text = "Cargando configuración...", progress = 40},
-        {text = "Buscando Zona-12...", progress = 55},
-        {text = "Preparando GUI...", progress = 70},
-        {text = "Cargando funciones...", progress = 85},
-        {text = "¡Listo!", progress = 100}
-    }
+local toggleCorner = Instance.new("UICorner")
+toggleCorner.Parent = toggleBtn
+toggleCorner.CornerRadius = UDim.new(1, 0)
 
-    for _, stepData in ipairs(loadSteps) do
-        local targetProgress = stepData.progress
-        subtitleLabel.Text = stepData.text
+toggleBtn.MouseButton1Click:Connect(function()
+    mainFrame.Visible = not mainFrame.Visible
+end)
 
-        while progress < targetProgress do
-            progress = progress + 1
-            if progress > 100 then progress = 100 end
-
-            progressBar.Size = UDim2.new(progress / 100, 0, 1, 0)
-            percentLabel.Text = math.floor(progress) .. "%"
-
-            if progress < 30 then
-                progressBar.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
-            elseif progress < 60 then
-                progressBar.BackgroundColor3 = Color3.fromRGB(255, 200, 50)
-            else
-                progressBar.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
+-- ============================================================
+-- ACTUALIZAR AL RESPAWN
+-- ============================================================
+LocalPlayer.CharacterAdded:Connect(function()
+    if state.invisible then
+        task.wait(0.5)
+        local char = LocalPlayer.Character
+        if char then
+            for _, part in ipairs(char:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    savedProps[part] = {
+                        Transparency = part.Transparency,
+                        CanCollide = part.CanCollide,
+                        CanTouch = part.CanTouch,
+                        CanQuery = part.CanQuery
+                    }
+                    part.Transparency = 1
+                    part.CanTouch = true
+                    part.CanQuery = true
+                end
             end
-
-            task.wait(0.05)
         end
     end
-
-    task.wait(0.3)
-    loadMainScript()
 end)
+
+-- ============================================================
+-- ATAJOS DE TECLADO (PC)
+-- ============================================================
+UserInputService.InputBegan:Connect(function(input)
+    if input.KeyCode == Enum.KeyCode.B then
+        mainFrame.Visible = not mainFrame.Visible
+    end
+    
+    local map = {
+        [Enum.KeyCode.T] = "teleport",
+        [Enum.KeyCode.I] = "invisible",
+        [Enum.KeyCode.R] = "treadmill",
+        [Enum.KeyCode.C] = "clon",
+        [Enum.KeyCode.A] = "antiAFK",
+        [Enum.KeyCode.S] = "autoSpeed",
+        [Enum.KeyCode.K] = "autoCrowns",
+        [Enum.KeyCode.U] = "auraActive",
+        [Enum.KeyCode.V] = "autoRebirth",
+        [Enum.KeyCode.W] = "autoWalk",
+        [Enum.KeyCode.F] = "farmAll"
+    }
+    local toggle = map[input.KeyCode]
+    if toggle and btnObjects[toggle] then
+        btnObjects[toggle].MouseButton1Click:Fire()
+    end
+end)
+
+-- ============================================================
+-- INICIALIZACIÓN
+-- ============================================================
+print("========================================")
+print("   ULTIMATE FARM v7.0 CARGADO")
+print("   Creado por: Rivalsteam73")
+print("========================================")
+print("")
+print("  📌 GUI CREADO POR RIVALSTEAM73")
+print("  📌 TODOS LOS BOTONES SON TÁCTILES")
+print("")
+print("  🎯 FUNCIONES DISPONIBLES:")
+print("  📡 Teleport    👻 Invisible    🏃 Treadmill")
+print("  👥 Clon Farm   🛡️ Anti-AFK    ⚡ Auto-Speed")
+print("  👑 Auto-Crowns  🌀 Aura        🔄 Auto-Rebirth")
+print("  🚶 Auto-Walk   🔥 Farm All")
+print("")
+print("  📌 Teclas PC: T I R C A S K U V W F B")
+print("")
+print("  👑 Coronas: " .. tostring(coronas.Value))
+if progresoSpeed then
+    print("  ⚡ Speed: " .. tostring(progresoSpeed.Value))
+end
+print("  📍 Zona-12: " .. (elements.partCorona and "✅ OK" or "❌ NO"))
+print("========================================")
